@@ -1,0 +1,27 @@
+<%- include('header'); -%>
+    <h1><%= date %></h1>
+    <ul>
+
+        <% for (var i=0; i < newFruits.length; i++)
+        { %>
+
+            <li> <%= newFruits[i] %> </li>
+        <% } %>
+    </ul>
+    <form action="/" method="post">
+        <h3>insert</h3>
+        <input type="text" name="newFruit">
+        <button name="button" value="insert">add</button>
+        <br>
+        <h3>Update</h3>
+        <input type="text" name="oldValue">
+        <input type="text" name="newValue">
+        <button name="button" value="update">update</button>
+        <br>
+        <h3>Delete</h3>
+        <input type="text" name="delete">
+        <button name="button" value="delete">delete</button>
+        <br>
+        <input type="file">
+    </form>
+    <%- include('footer'); -%>
