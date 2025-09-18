@@ -1,0 +1,89 @@
+<%- include("../partials/header") %>
+
+<div class="d-flex">
+    <%- include("../partials/lecturer-sidebar") %>
+    
+    <div class="main-content flex-grow-1">
+        <div class="container-fluid py-4">
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 mb-0">Edit Student Result: <%= result.student_name %> - <%= result.assessment_title %></h1>
+                    <p class="text-muted">Adjust scores, grades, and provide feedback</p>
+                </div>
+                <div class="btn-group">
+                    <button type="submit" form="editResultForm" class="btn btn-primary">
+                        <i class="bi bi-save me-1"></i>Save Changes
+                    </button>
+                    <a href="/lecturer/results" class="btn btn-outline-secondary">
+                        <i class="bi bi-x-circle me-1"></i>Cancel
+                    </a>
+                </div>
+            </div>
+
+            <!-- Edit Result Form -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-pencil-square me-2"></i>Result Details
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form id="editResultForm" data-result-id="<%= result.id %>">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="studentName" class="form-label">Student Name</label>
+                                <input type="text" class="form-control" id="studentName" value="<%= result.student_name %>" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="assessmentTitle" class="form-label">Assessment Title</label>
+                                <input type="text" class="form-control" id="assessmentTitle" value="<%= result.assessment_title %>" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="courseName" class="form-label">Course</label>
+                                <input type="text" class="form-control" id="courseName" value="<%= result.course_name %>" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="score" class="form-label">Score (out of <%= result.max_score %>) *</label>
+                                <input type="number" class="form-control" id="score" name="score" min="0" max="<%= result.max_score %>" value="<%= result.score %>" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="grade" class="form-label">Grade *</label>
+                                <input type="text" class="form-control" id="grade" name="grade" value="<%= result.grade %>" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="status" class="form-label">Status *</label>
+                                <select class="form-select" id="status" name="status" required>
+                                    <option value="submitted" <%= result.status === 'submitted' ? 'selected' : '' %>>Submitted</option>
+                                    <option value="graded" <%= result.status === 'graded' ? 'selected' : '' %>>Graded</option>
+                                    <option value="incomplete" <%= result.status === 'incomplete' ? 'selected' : '' %>>Incomplete</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="submittedAt" class="form-label">Submitted On</label>
+                                <input type="datetime-local" class="form-control" id="submittedAt" value="<%= new Date(result.submitted_at).toISOString().slice(0, 16) %>" readonly>
+                            </div>
+                            <div class="col-12">
+                                <label for="feedback" class="form-label">Feedback</label>
+                                <textarea class="form-control" id="feedback" name="feedback" rows="4"><%= result.feedback %></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Add any specific styles for this page here */
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        LecturerModule.results.initEditResultPage();
+    });
+</script>
+
+<%- include("../partials/footer") %>
+

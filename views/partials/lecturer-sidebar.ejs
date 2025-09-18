@@ -1,0 +1,405 @@
+<!-- Lecturer Sidebar -->
+<div class="lecturer-sidebar bg-light border-end" id="lecturerSidebar">
+    <div class="sidebar-header p-3 border-bottom">
+        <h5 class="mb-0 text-info fw-bold">
+            <i class="bi bi-person-workspace me-2"></i>
+            Lecturer Portal
+        </h5>
+        <small class="text-muted">Teaching Dashboard</small>
+    </div>
+    
+    <div class="sidebar-content">
+        <nav class="nav flex-column p-3">
+            <!-- Dashboard -->
+            <a href="/lecturer/dashboard" class="nav-link <%= currentPath === '/lecturer/dashboard' ? 'active' : '' %>">
+                <i class="bi bi-speedometer2 me-2"></i>
+                Dashboard
+            </a>
+            
+            <!-- Course Management -->
+            <div class="nav-section">
+                <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">COURSE MANAGEMENT</h6>
+                
+                <a href="/lecturer/courses" class="nav-link <%= currentPath.startsWith('/lecturer/courses') ? 'active' : '' %>">
+                    <i class="bi bi-book me-2"></i>
+                    My Courses
+                    <span class="badge bg-info ms-auto course-count">0</span>
+                </a>
+                
+                <a href="/lecturer/students" class="nav-link <%= currentPath.startsWith('/lecturer/students') ? 'active' : '' %>">
+                    <i class="bi bi-people me-2"></i>
+                    My Students
+                    <span class="badge bg-secondary ms-auto student-count">0</span>
+                </a>
+            </div>
+            
+            <!-- Assessment Management -->
+            <div class="nav-section">
+                <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">ASSESSMENTS</h6>
+                
+                <a href="/lecturer/assessments" class="nav-link <%= currentPath.startsWith('/lecturer/assessments') ? 'active' : '' %>">
+                    <i class="bi bi-clipboard-check me-2"></i>
+                    All Assessments
+                    <span class="badge bg-primary ms-auto assessment-count">0</span>
+                </a>
+                
+                <a href="/lecturer/create-assessment" class="nav-link <%= currentPath.startsWith('/lecturer/create-assessment') ? 'active' : '' %>">
+                    <i class="bi bi-plus-circle me-2"></i>
+                    Create Assessment
+                </a>
+                
+                <a href="/lecturer/edit-assessment" class="nav-link <%= currentPath.startsWith('/lecturer/edit-assessment') ? 'active' : '' %>">
+                    <i class="bi bi-pencil-square me-2"></i>
+                    Edit Assessments
+                </a>
+            </div>
+            
+            <!-- Results Management -->
+            <div class="nav-section">
+                <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">RESULTS</h6>
+                
+                <a href="/lecturer/results" class="nav-link <%= currentPath.startsWith('/lecturer/results') ? 'active' : '' %>">
+                    <i class="bi bi-bar-chart me-2"></i>
+                    All Results
+                    <span class="badge bg-success ms-auto result-count">0</span>
+                </a>
+                
+                <a href="/lecturer/assessment-results" class="nav-link <%= currentPath.startsWith('/lecturer/assessment-results') ? 'active' : '' %>">
+                    <i class="bi bi-graph-up me-2"></i>
+                    Assessment Results
+                </a>
+                
+                <a href="/lecturer/edit-results" class="nav-link <%= currentPath.startsWith('/lecturer/edit-results') ? 'active' : '' %>">
+                    <i class="bi bi-pencil me-2"></i>
+                    Grade Students
+                </a>
+            </div>
+            
+            <!-- Tools & Reports -->
+            <div class="nav-section">
+                <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">TOOLS & REPORTS</h6>
+                
+                <a href="/lecturer/analytics" class="nav-link <%= currentPath.startsWith('/lecturer/analytics') ? 'active' : '' %>">
+                    <i class="bi bi-graph-down me-2"></i>
+                    Class Analytics
+                </a>
+                
+                <a href="/lecturer/export" class="nav-link">
+                    <i class="bi bi-download me-2"></i>
+                    Export Results
+                </a>
+                
+                <a href="/lecturer/attendance" class="nav-link <%= currentPath.startsWith('/lecturer/attendance') ? 'active' : '' %>">
+                    <i class="bi bi-calendar-check me-2"></i>
+                    Attendance
+                </a>
+            </div>
+            
+            <!-- Profile -->
+            <div class="nav-section">
+                <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">PROFILE</h6>
+                
+                <a href="/auth/profile" class="nav-link <%= currentPath.startsWith('/auth/profile') ? 'active' : '' %>">
+                    <i class="bi bi-person me-2"></i>
+                    My Profile
+                </a>
+                
+                <a href="/lecturer/settings" class="nav-link <%= currentPath.startsWith('/lecturer/settings') ? 'active' : '' %>">
+                    <i class="bi bi-gear me-2"></i>
+                    Settings
+                </a>
+            </div>
+        </nav>
+    </div>
+    
+    <!-- Teaching Summary -->
+    <div class="sidebar-footer p-3 border-top mt-auto">
+        <div class="teaching-summary">
+            <h6 class="small fw-bold text-muted mb-2">TEACHING STATS</h6>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <small class="text-muted">Active Courses:</small>
+                <span class="text-dark fw-semibold active-courses">0</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <small class="text-muted">Total Students:</small>
+                <span class="text-dark fw-semibold total-students">0</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <small class="text-muted">Pending Grades:</small>
+                <span class="badge bg-warning pending-grades">0</span>
+            </div>
+            <div class="progress" style="height: 6px;">
+                <div class="progress-bar bg-info" role="progressbar" style="width: 0%" id="gradingProgress"></div>
+            </div>
+            <small class="text-muted">Grading Progress</small>
+        </div>
+    </div>
+</div>
+
+<!-- Sidebar Toggle Button (Mobile) -->
+<button class="btn btn-info d-lg-none sidebar-toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#lecturerSidebarOffcanvas">
+    <i class="bi bi-list"></i>
+</button>
+
+<!-- Offcanvas Sidebar for Mobile -->
+<div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="lecturerSidebarOffcanvas">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title text-info fw-bold">
+            <i class="bi bi-person-workspace me-2"></i>
+            Lecturer Portal
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+        <nav class="nav flex-column p-3">
+            <!-- Same navigation items as desktop sidebar -->
+            <a href="/lecturer/dashboard" class="nav-link <%= currentPath === '/lecturer/dashboard' ? 'active' : '' %>">
+                <i class="bi bi-speedometer2 me-2"></i>Dashboard
+            </a>
+            
+            <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">COURSE MANAGEMENT</h6>
+            <a href="/lecturer/courses" class="nav-link <%= currentPath.startsWith('/lecturer/courses') ? 'active' : '' %>">
+                <i class="bi bi-book me-2"></i>My Courses
+            </a>
+            <a href="/lecturer/students" class="nav-link <%= currentPath.startsWith('/lecturer/students') ? 'active' : '' %>">
+                <i class="bi bi-people me-2"></i>My Students
+            </a>
+            
+            <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">ASSESSMENTS</h6>
+            <a href="/lecturer/assessments" class="nav-link <%= currentPath.startsWith('/lecturer/assessments') ? 'active' : '' %>">
+                <i class="bi bi-clipboard-check me-2"></i>All Assessments
+            </a>
+            <a href="/lecturer/create-assessment" class="nav-link <%= currentPath.startsWith('/lecturer/create-assessment') ? 'active' : '' %>">
+                <i class="bi bi-plus-circle me-2"></i>Create Assessment
+            </a>
+            <a href="/lecturer/edit-assessment" class="nav-link <%= currentPath.startsWith('/lecturer/edit-assessment') ? 'active' : '' %>">
+                <i class="bi bi-pencil-square me-2"></i>Edit Assessments
+            </a>
+            
+            <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">RESULTS</h6>
+            <a href="/lecturer/results" class="nav-link <%= currentPath.startsWith('/lecturer/results') ? 'active' : '' %>">
+                <i class="bi bi-bar-chart me-2"></i>All Results
+            </a>
+            <a href="/lecturer/assessment-results" class="nav-link <%= currentPath.startsWith('/lecturer/assessment-results') ? 'active' : '' %>">
+                <i class="bi bi-graph-up me-2"></i>Assessment Results
+            </a>
+            <a href="/lecturer/edit-results" class="nav-link <%= currentPath.startsWith('/lecturer/edit-results') ? 'active' : '' %>">
+                <i class="bi bi-pencil me-2"></i>Grade Students
+            </a>
+            
+            <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">TOOLS & REPORTS</h6>
+            <a href="/lecturer/analytics" class="nav-link <%= currentPath.startsWith('/lecturer/analytics') ? 'active' : '' %>">
+                <i class="bi bi-graph-down me-2"></i>Class Analytics
+            </a>
+            <a href="/lecturer/export" class="nav-link">
+                <i class="bi bi-download me-2"></i>Export Results
+            </a>
+            <a href="/lecturer/attendance" class="nav-link <%= currentPath.startsWith('/lecturer/attendance') ? 'active' : '' %>">
+                <i class="bi bi-calendar-check me-2"></i>Attendance
+            </a>
+            
+            <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">PROFILE</h6>
+            <a href="/auth/profile" class="nav-link <%= currentPath.startsWith('/auth/profile') ? 'active' : '' %>">
+                <i class="bi bi-person me-2"></i>My Profile
+            </a>
+            <a href="/lecturer/settings" class="nav-link <%= currentPath.startsWith('/lecturer/settings') ? 'active' : '' %>">
+                <i class="bi bi-gear me-2"></i>Settings
+            </a>
+        </nav>
+    </div>
+</div>
+
+<style>
+.lecturer-sidebar {
+    width: 280px;
+    height: calc(100vh - 56px); /* Adjust for navbar height */
+    position: fixed;
+    top: 56px; /* Navbar height */
+    left: 0;
+    overflow-y: auto;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-content {
+    flex: 1;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+}
+
+.nav-link {
+    color: #6c757d;
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem;
+    margin-bottom: 0.25rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.nav-link:hover {
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+.nav-link.active {
+    background-color: #0dcaf0;
+    color: white;
+}
+
+.nav-link.active:hover {
+    background-color: #31d2f2;
+    color: white;
+}
+
+.nav-section-title {
+    padding: 0 1rem;
+    letter-spacing: 0.05em;
+}
+
+.teaching-summary {
+    background-color: #f8f9fa;
+    border-radius: 0.375rem;
+    padding: 1rem;
+}
+
+.sidebar-toggle {
+    position: fixed;
+    top: 70px;
+    left: 15px;
+    z-index: 1050;
+}
+
+/* Main content adjustment when sidebar is visible */
+@media (min-width: 992px) {
+    .main-content {
+        margin-left: 280px;
+    }
+}
+
+/* Badge styles */
+.badge {
+    font-size: 0.7em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+    .lecturer-sidebar {
+        display: none;
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+/* Assessment status indicators */
+.status-published { color: #198754; }
+.status-draft { color: #6c757d; }
+.status-overdue { color: #dc3545; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Load sidebar statistics for lecturer
+    loadLecturerSidebarStats();
+});
+
+function loadLecturerSidebarStats() {
+    // Load course statistics
+    fetch('/api/stats/courses')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.querySelector('.course-count').textContent = data.stats.total;
+                document.querySelector('.active-courses').textContent = data.stats.active;
+            }
+        })
+        .catch(error => {
+            console.error('Error loading course stats:', error);
+            document.querySelector('.course-count').textContent = '0';
+            document.querySelector('.active-courses').textContent = '0';
+        });
+    
+    // Load assessment statistics
+    fetch('/api/stats/assessments')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.querySelector('.assessment-count').textContent = data.stats.total;
+                
+                // Calculate grading progress
+                const total = data.stats.total;
+                const published = data.stats.published;
+                const progress = total > 0 ? (published / total) * 100 : 0;
+                
+                document.getElementById('gradingProgress').style.width = progress + '%';
+                document.querySelector('.pending-grades').textContent = total - published;
+            }
+        })
+        .catch(error => {
+            console.error('Error loading assessment stats:', error);
+            document.querySelector('.assessment-count').textContent = '0';
+            document.querySelector('.pending-grades').textContent = '0';
+        });
+    
+    // Load student count (would need to implement this endpoint)
+    // For now, set default values
+    document.querySelector('.student-count').textContent = '0';
+    document.querySelector('.result-count').textContent = '0';
+    document.querySelector('.total-students').textContent = '0';
+}
+
+// Add export functionality
+document.addEventListener('click', function(e) {
+    if (e.target.closest('a[href="/lecturer/export"]')) {
+        e.preventDefault();
+        
+        // Show export options
+        const exportOptions = `
+            <div class="dropdown-menu show position-static">
+                <h6 class="dropdown-header">Export Options</h6>
+                <a class="dropdown-item" href="#" onclick="exportResults('all')">
+                    <i class="bi bi-file-spreadsheet me-2"></i>All Results (CSV)
+                </a>
+                <a class="dropdown-item" href="#" onclick="exportResults('course')">
+                    <i class="bi bi-book me-2"></i>By Course
+                </a>
+                <a class="dropdown-item" href="#" onclick="exportResults('assessment')">
+                    <i class="bi bi-clipboard-check me-2"></i>By Assessment
+                </a>
+            </div>
+        `;
+        
+        // For now, default to all results export
+        window.location.href = '/lecturer/export-results?format=csv';
+    }
+});
+
+function exportResults(type) {
+    // Implementation would depend on the specific export type
+    console.log('Exporting results:', type);
+}
+
+// Quick actions for common tasks
+function quickCreateAssessment() {
+    window.location.href = '/lecturer/create-assessment';
+}
+
+function quickGradeStudents() {
+    window.location.href = '/lecturer/edit-results';
+}
+
+// Add quick action buttons (could be implemented in the UI)
+document.addEventListener('DOMContentLoaded', function() {
+    // Add quick action tooltips
+    const quickActions = document.querySelectorAll('[data-quick-action]');
+    quickActions.forEach(action => {
+        action.setAttribute('title', action.dataset.quickAction);
+    });
+});
+</script>
+

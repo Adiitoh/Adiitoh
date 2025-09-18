@@ -1,0 +1,343 @@
+<!-- Student Sidebar -->
+<div class="student-sidebar bg-light border-end" id="studentSidebar">
+    <div class="sidebar-header p-3 border-bottom">
+        <h5 class="mb-0 text-success fw-bold">
+            <i class="bi bi-mortarboard-fill me-2"></i>
+            Student Portal
+        </h5>
+        <% if (user && user.student_id) { %>
+            <small class="text-muted">ID: <%= user.student_id %></small>
+        <% } %>
+    </div>
+    
+    <div class="sidebar-content">
+        <nav class="nav flex-column p-3">
+            <!-- Dashboard -->
+            <a href="/student/dashboard" class="nav-link <%= currentPath === '/student/dashboard' ? 'active' : '' %>">
+                <i class="bi bi-speedometer2 me-2"></i>
+                Dashboard
+            </a>
+            
+            <!-- Academic -->
+            <div class="nav-section">
+                <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">ACADEMIC</h6>
+                
+                <a href="/student/courses" class="nav-link <%= currentPath.startsWith('/student/courses') ? 'active' : '' %>">
+                    <i class="bi bi-book me-2"></i>
+                    My Courses
+                    <span class="badge bg-info ms-auto course-count">0</span>
+                </a>
+                
+                <a href="/student/results" class="nav-link <%= currentPath.startsWith('/student/results') ? 'active' : '' %>">
+                    <i class="bi bi-trophy me-2"></i>
+                    My Results
+                    <span class="badge bg-success ms-auto result-count">0</span>
+                </a>
+                
+                <a href="/student/analytics" class="nav-link <%= currentPath.startsWith('/student/analytics') ? 'active' : '' %>">
+                    <i class="bi bi-graph-up me-2"></i>
+                    Performance Analytics
+                </a>
+            </div>
+            
+            <!-- Tools -->
+            <div class="nav-section">
+                <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">TOOLS</h6>
+                
+                <a href="/student/download-results" class="nav-link">
+                    <i class="bi bi-download me-2"></i>
+                    Download Results
+                </a>
+                
+                <a href="/student/calendar" class="nav-link <%= currentPath.startsWith('/student/calendar') ? 'active' : '' %>">
+                    <i class="bi bi-calendar-event me-2"></i>
+                    Academic Calendar
+                </a>
+                
+                <a href="/student/schedule" class="nav-link <%= currentPath.startsWith('/student/schedule') ? 'active' : '' %>">
+                    <i class="bi bi-clock me-2"></i>
+                    Class Schedule
+                </a>
+            </div>
+            
+            <!-- Profile -->
+            <div class="nav-section">
+                <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">PROFILE</h6>
+                
+                <a href="/auth/profile" class="nav-link <%= currentPath.startsWith('/auth/profile') ? 'active' : '' %>">
+                    <i class="bi bi-person me-2"></i>
+                    My Profile
+                </a>
+                
+                <a href="/student/settings" class="nav-link <%= currentPath.startsWith('/student/settings') ? 'active' : '' %>">
+                    <i class="bi bi-gear me-2"></i>
+                    Settings
+                </a>
+            </div>
+        </nav>
+    </div>
+    
+    <!-- Performance Summary -->
+    <div class="sidebar-footer p-3 border-top mt-auto">
+        <div class="performance-summary">
+            <h6 class="small fw-bold text-muted mb-2">QUICK STATS</h6>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <small class="text-muted">Overall Average:</small>
+                <span class="badge bg-primary overall-average">0%</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <small class="text-muted">Total Assessments:</small>
+                <span class="text-dark fw-semibold total-assessments">0</span>
+            </div>
+            <div class="progress" style="height: 6px;">
+                <div class="progress-bar bg-success" role="progressbar" style="width: 0%" id="performanceProgress"></div>
+            </div>
+            <small class="text-muted">Academic Progress</small>
+        </div>
+    </div>
+</div>
+
+<!-- Sidebar Toggle Button (Mobile) -->
+<button class="btn btn-success d-lg-none sidebar-toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#studentSidebarOffcanvas">
+    <i class="bi bi-list"></i>
+</button>
+
+<!-- Offcanvas Sidebar for Mobile -->
+<div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="studentSidebarOffcanvas">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title text-success fw-bold">
+            <i class="bi bi-mortarboard-fill me-2"></i>
+            Student Portal
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+        <nav class="nav flex-column p-3">
+            <!-- Same navigation items as desktop sidebar -->
+            <a href="/student/dashboard" class="nav-link <%= currentPath === '/student/dashboard' ? 'active' : '' %>">
+                <i class="bi bi-speedometer2 me-2"></i>Dashboard
+            </a>
+            
+            <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">ACADEMIC</h6>
+            <a href="/student/courses" class="nav-link <%= currentPath.startsWith('/student/courses') ? 'active' : '' %>">
+                <i class="bi bi-book me-2"></i>My Courses
+            </a>
+            <a href="/student/results" class="nav-link <%= currentPath.startsWith('/student/results') ? 'active' : '' %>">
+                <i class="bi bi-trophy me-2"></i>My Results
+            </a>
+            <a href="/student/analytics" class="nav-link <%= currentPath.startsWith('/student/analytics') ? 'active' : '' %>">
+                <i class="bi bi-graph-up me-2"></i>Performance Analytics
+            </a>
+            
+            <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">TOOLS</h6>
+            <a href="/student/download-results" class="nav-link">
+                <i class="bi bi-download me-2"></i>Download Results
+            </a>
+            <a href="/student/calendar" class="nav-link <%= currentPath.startsWith('/student/calendar') ? 'active' : '' %>">
+                <i class="bi bi-calendar-event me-2"></i>Academic Calendar
+            </a>
+            <a href="/student/schedule" class="nav-link <%= currentPath.startsWith('/student/schedule') ? 'active' : '' %>">
+                <i class="bi bi-clock me-2"></i>Class Schedule
+            </a>
+            
+            <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">PROFILE</h6>
+            <a href="/auth/profile" class="nav-link <%= currentPath.startsWith('/auth/profile') ? 'active' : '' %>">
+                <i class="bi bi-person me-2"></i>My Profile
+            </a>
+            <a href="/student/settings" class="nav-link <%= currentPath.startsWith('/student/settings') ? 'active' : '' %>">
+                <i class="bi bi-gear me-2"></i>Settings
+            </a>
+        </nav>
+    </div>
+</div>
+
+<style>
+.student-sidebar {
+    width: 280px;
+    height: calc(100vh - 56px); /* Adjust for navbar height */
+    position: fixed;
+    top: 56px; /* Navbar height */
+    left: 0;
+    overflow-y: auto;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-content {
+    flex: 1;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+}
+
+.nav-link {
+    color: #6c757d;
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem;
+    margin-bottom: 0.25rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.nav-link:hover {
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+.nav-link.active {
+    background-color: #198754;
+    color: white;
+}
+
+.nav-link.active:hover {
+    background-color: #157347;
+    color: white;
+}
+
+.nav-section-title {
+    padding: 0 1rem;
+    letter-spacing: 0.05em;
+}
+
+.performance-summary {
+    background-color: #f8f9fa;
+    border-radius: 0.375rem;
+    padding: 1rem;
+}
+
+.sidebar-toggle {
+    position: fixed;
+    top: 70px;
+    left: 15px;
+    z-index: 1050;
+}
+
+/* Main content adjustment when sidebar is visible */
+@media (min-width: 992px) {
+    .main-content {
+        margin-left: 280px;
+    }
+}
+
+/* Badge styles */
+.badge {
+    font-size: 0.7em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+    .student-sidebar {
+        display: none;
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+/* Grade color coding */
+.grade-a { color: #198754; }
+.grade-b { color: #0d6efd; }
+.grade-c { color: #fd7e14; }
+.grade-d { color: #ffc107; }
+.grade-f { color: #dc3545; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Load sidebar statistics for student
+    loadStudentSidebarStats();
+});
+
+function loadStudentSidebarStats() {
+     if (user && user.id) 
+    // Load student performance data
+    fetch('/api/stats/performance/<%= user.id %>')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const stats = data.data.overall;
+                
+                // Update sidebar stats
+                document.querySelector('.course-count').textContent = Object.keys(data.data.byCourse).length;
+                document.querySelector('.result-count').textContent = stats.totalAssessments;
+                document.querySelector('.overall-average').textContent = stats.averageScore + '%';
+                document.querySelector('.total-assessments').textContent = stats.totalAssessments;
+                
+                // Update progress bar
+                const progressBar = document.getElementById('performanceProgress');
+                const percentage = parseFloat(stats.averageScore);
+                progressBar.style.width = percentage + '%';
+                
+                // Color code the progress bar based on performance
+                progressBar.className = 'progress-bar';
+                if (percentage >= 90) {
+                    progressBar.classList.add('bg-success');
+                } else if (percentage >= 80) {
+                    progressBar.classList.add('bg-info');
+                } else if (percentage >= 70) {
+                    progressBar.classList.add('bg-warning');
+                } else if (percentage >= 60) {
+                    progressBar.classList.add('bg-orange');
+                } else {
+                    progressBar.classList.add('bg-danger');
+                }
+                
+                // Update overall average badge color
+                const averageBadge = document.querySelector('.overall-average');
+                averageBadge.className = 'badge ms-auto overall-average';
+                if (percentage >= 90) {
+                    averageBadge.classList.add('bg-success');
+                } else if (percentage >= 80) {
+                    averageBadge.classList.add('bg-info');
+                } else if (percentage >= 70) {
+                    averageBadge.classList.add('bg-warning');
+                } else if (percentage >= 60) {
+                    averageBadge.classList.add('bg-secondary');
+                } else {
+                    averageBadge.classList.add('bg-danger');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error loading student stats:', error);
+            // Set default values on error
+            document.querySelector('.course-count').textContent = '0';
+            document.querySelector('.result-count').textContent = '0';
+            document.querySelector('.overall-average').textContent = '0%';
+            document.querySelector('.total-assessments').textContent = '0';
+        });
+    
+};
+
+// Add download functionality
+document.addEventListener('click', function(e) {
+    if (e.target.closest('a[href="/student/download-results"]')) {
+        e.preventDefault();
+        
+        // Show download options modal or dropdown
+        const downloadOptions = `
+            <div class="dropdown-menu show position-static">
+                <h6 class="dropdown-header">Download Format</h6>
+                <a class="dropdown-item" href="/student/download-results?format=pdf">
+                    <i class="bi bi-file-pdf me-2"></i>PDF Report
+                </a>
+                <a class="dropdown-item" href="/student/download-results?format=csv">
+                    <i class="bi bi-file-spreadsheet me-2"></i>CSV Data
+                </a>
+                <a class="dropdown-item" href="/student/download-results?format=json">
+                    <i class="bi bi-file-code me-2"></i>JSON Data
+                </a>
+            </div>
+        `;
+        
+        // You could implement a proper modal here
+        // For now, default to CSV download
+        window.location.href = '/student/download-results?format=csv';
+    }
+});
+</script>
+

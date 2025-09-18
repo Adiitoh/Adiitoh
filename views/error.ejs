@@ -1,0 +1,412 @@
+<%- include('partials/header') %>
+
+<div class="error-container min-vh-100 d-flex align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 text-center">
+                <div class="error-content">
+                    <!-- Error Icon -->
+                    <div class="error-icon mb-4">
+                        <% if (error.status === 404) { %>
+                            <i class="bi bi-search text-primary" style="font-size: 6rem;"></i>
+                        <% } else if (error.status === 403) { %>
+                            <i class="bi bi-shield-exclamation text-warning" style="font-size: 6rem;"></i>
+                        <% } else if (error.status === 500) { %>
+                            <i class="bi bi-exclamation-triangle text-danger" style="font-size: 6rem;"></i>
+                        <% } else { %>
+                            <i class="bi bi-exclamation-circle text-secondary" style="font-size: 6rem;"></i>
+                        <% } %>
+                    </div>
+
+                    <!-- Error Code -->
+                    <h1 class="error-code display-1 fw-bold text-primary mb-3">
+                        <%= error.status || 500 %>
+                    </h1>
+
+                    <!-- Error Title -->
+                    <h2 class="error-title fw-bold mb-3">
+                        <% if (error.status === 404) { %>
+                            Page Not Found
+                        <% } else if (error.status === 403) { %>
+                            Access Denied
+                        <% } else if (error.status === 500) { %>
+                            Internal Server Error
+                        <% } else { %>
+                            Something Went Wrong
+                        <% } %>
+                    </h2>
+
+                    <!-- Error Message -->
+                    <p class="error-message lead text-muted mb-4">
+                        <%= error.message || 'An unexpected error occurred. Please try again later.' %>
+                    </p>
+
+                    <!-- Error Details (Development Only) -->
+                    <% if (error.stack && typeof error.stack === 'string') { %>
+                        <div class="error-details mt-4">
+                            <div class="card bg-light border-0">
+                                <div class="card-header bg-transparent border-0">
+                                    <h6 class="mb-0 text-muted">
+                                        <i class="bi bi-bug me-2"></i>
+                                        Error Details (Development Mode)
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <pre class="text-start small text-muted mb-0"><%= error.stack %></pre>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+
+                    <!-- Action Buttons -->
+                    <div class="error-actions mt-5">
+                        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+                            <button onclick="history.back()" class="btn btn-outline-primary btn-lg">
+                                <i class="bi bi-arrow-left me-2"></i>
+                                Go Back
+                            </button>
+                            
+                            <a href="/" class="btn btn-primary btn-lg">
+                                <i class="bi bi-house me-2"></i>
+                                Home Page
+                            </a>
+                            
+                            <% if (user) { %>
+                                <% if (user.role === 'admin') { %>
+                                    <a href="/admin/dashboard" class="btn btn-outline-secondary btn-lg">
+                                        <i class="bi bi-speedometer2 me-2"></i>
+                                        Dashboard
+                                    </a>
+                                <% } else if (user.role === 'lecturer') { %>
+                                    <a href="/lecturer/dashboard" class="btn btn-outline-secondary btn-lg">
+                                        <i class="bi bi-speedometer2 me-2"></i>
+                                        Dashboard
+                                    </a>
+                                <% } else if (user.role === 'student') { %>
+                                    <a href="/student/dashboard" class="btn btn-outline-secondary btn-lg">
+                                        <i class="bi bi-speedometer2 me-2"></i>
+                                        Dashboard
+                                    </a>
+                                <% } %>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <!-- Help Section -->
+                    <div class="error-help mt-5 pt-4 border-top">
+                        <h5 class="fw-semibold mb-3">Need Help?</h5>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="help-item">
+                                    <i class="bi bi-question-circle text-info mb-2" style="font-size: 2rem;"></i>
+                                    <h6 class="fw-semibold">FAQ</h6>
+                                    <p class="text-muted small mb-0">Check our frequently asked questions</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="help-item">
+                                    <i class="bi bi-envelope text-success mb-2" style="font-size: 2rem;"></i>
+                                    <h6 class="fw-semibold">Contact Support</h6>
+                                    <p class="text-muted small mb-0">Get help from our support team</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="help-item">
+                                    <i class="bi bi-book text-warning mb-2" style="font-size: 2rem;"></i>
+                                    <h6 class="fw-semibold">Documentation</h6>
+                                    <p class="text-muted small mb-0">Browse our help documentation</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Report Error -->
+                    <% if (error.status >= 500) { %>
+                        <div class="error-report mt-4">
+                            <button class="btn btn-sm btn-outline-danger" onclick="reportError()">
+                                <i class="bi bi-bug me-2"></i>
+                                Report This Error
+                            </button>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.error-container {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    position: relative;
+}
+
+.error-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(0,0,0,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+    opacity: 0.5;
+}
+
+.error-content {
+    position: relative;
+    z-index: 1;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.error-icon {
+    animation: bounceIn 1s ease-out;
+}
+
+.error-code {
+    background: linear-gradient(135deg, #0d6efd, #6610f2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: slideInDown 0.8s ease-out 0.2s both;
+}
+
+.error-title {
+    animation: slideInDown 0.8s ease-out 0.4s both;
+}
+
+.error-message {
+    animation: slideInUp 0.8s ease-out 0.6s both;
+}
+
+.error-actions {
+    animation: slideInUp 0.8s ease-out 0.8s both;
+}
+
+.error-help {
+    animation: fadeIn 0.8s ease-out 1s both;
+}
+
+.help-item {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.help-item:hover {
+    background-color: rgba(0,0,0,0.05);
+    transform: translateY(-2px);
+}
+
+.error-details pre {
+    max-height: 300px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+    70% {
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .error-icon i {
+        font-size: 4rem !important;
+    }
+    
+    .error-code {
+        font-size: 4rem !important;
+    }
+    
+    .error-actions .btn {
+        width: 100%;
+    }
+    
+    .help-item {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+}
+
+/* Button hover effects */
+.btn {
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Error report button */
+.error-report {
+    animation: fadeIn 0.8s ease-out 1.2s both;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add click handlers for help items
+    document.querySelectorAll('.help-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const title = this.querySelector('h6').textContent;
+            
+            // Add visual feedback
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+            
+            // Handle different help types
+            switch(title) {
+                case 'FAQ':
+                    // Redirect to FAQ page or show modal
+                    console.log('Opening FAQ...');
+                    break;
+                case 'Contact Support':
+                    // Open contact form or email
+                    window.location.href = 'mailto:support@studenttracker.com?subject=Error Report&body=I encountered an error on the page.';
+                    break;
+                case 'Documentation':
+                    // Redirect to documentation
+                    console.log('Opening documentation...');
+                    break;
+            }
+        });
+    });
+
+    // Auto-refresh for server errors (optional)
+    if (error.status >= 500) { 
+        let refreshTimer;
+        let countdown = 30;
+        
+        function startAutoRefresh() {
+            const refreshBtn = document.createElement('button');
+            refreshBtn.className = 'btn btn-sm btn-outline-info mt-3';
+            refreshBtn.innerHTML = `<i class="bi bi-arrow-clockwise me-2"></i>Auto-refresh in ${countdown}s`;
+            
+            document.querySelector('.error-report').appendChild(refreshBtn);
+            
+            refreshTimer = setInterval(() => {
+                countdown--;
+                refreshBtn.innerHTML = `<i class="bi bi-arrow-clockwise me-2"></i>Auto-refresh in ${countdown}s`;
+                
+                if (countdown <= 0) {
+                    window.location.reload();
+                }
+            }, 1000);
+            
+            refreshBtn.addEventListener('click', () => {
+                clearInterval(refreshTimer);
+                window.location.reload();
+            });
+        }
+        
+        // Start auto-refresh after 5 seconds
+        setTimeout(startAutoRefresh, 5000);
+    };
+});
+
+function reportError() {
+    const errorData = {
+        status: '<%= error.status %>',
+        message: '<%= error.message %>',
+        url: window.location.href,
+        userAgent: navigator.userAgent,
+        timestamp: new Date().toISOString()
+    };
+    
+    // You could send this to an error reporting service
+    console.log('Error reported:', errorData);
+    
+    // Show success message
+    const reportBtn = event.target;
+    const originalText = reportBtn.innerHTML;
+    reportBtn.innerHTML = '<i class="bi bi-check me-2"></i>Reported!';
+    reportBtn.disabled = true;
+    
+    setTimeout(() => {
+        reportBtn.innerHTML = originalText;
+        reportBtn.disabled = false;
+    }, 3000);
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+    // Press 'H' to go home
+    if (e.key === 'h' || e.key === 'H') {
+        window.location.href = '/';
+    }
+    
+    // Press 'B' to go back
+    if (e.key === 'b' || e.key === 'B') {
+        history.back();
+    }
+    
+    // Press 'R' to refresh
+    if (e.key === 'r' || e.key === 'R') {
+        window.location.reload();
+    }
+});
+</script>
+
+<%- include('partials/footer') %>
+

@@ -1,0 +1,144 @@
+<%- include("../partials/header") %>
+<body class="dashboard-page">
+    <div class="dashboard-layout">
+        <%- include("../partials/admin-sidebar") %>
+        <div class="dashboard-content">
+            <div class="main-content">
+                <div class="container-fluid p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h1 class="h3 fw-bold text-dark mb-1">System Settings</h1>
+                            <p class="text-muted mb-0">Manage application-wide configurations.</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="card shadow-sm mb-4">
+                                <div class="card-header bg-primary text-white fw-bold">General Settings</div>
+                                <div class="card-body">
+                                    <form id="generalSettingsForm">
+                                        <div class="mb-3">
+                                            <label for="appName" class="form-label">Application Name</label>
+                                            <input type="text" class="form-control" id="appName" name="appName" value="<%= typeof settings !== 'undefined' && settings.appName ? settings.appName : 'Student Assessment Tracker' %>">
+                                        </div>
+                                        <div class="mb-3 form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="registrationOpen" name="registrationOpen" <%= typeof settings !== 'undefined' && settings.registrationOpen ? 'checked' : '' %>>
+                                            <label class="form-check-label" for="registrationOpen">Allow New Registrations</label>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="card shadow-sm mb-4">
+                                <div class="card-header bg-info text-white fw-bold">Email Settings</div>
+                                <div class="card-body">
+                                    <form id="emailSettingsForm">
+                                        <div class="mb-3">
+                                            <label for="smtpHost" class="form-label">SMTP Host</label>
+                                            <input type="text" class="form-control" id="smtpHost" name="smtpHost" value="<%= typeof settings !== 'undefined' && settings.smtpHost ? settings.smtpHost : '' %>">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="smtpPort" class="form-label">SMTP Port</label>
+                                            <input type="number" class="form-control" id="smtpPort" name="smtpPort" value="<%= typeof settings !== 'undefined' && settings.smtpPort ? settings.smtpPort : '' %>">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="smtpUser" class="form-label">SMTP Username</label>
+                                            <input type="text" class="form-control" id="smtpUser" name="smtpUser" value="<%= typeof settings !== 'undefined' && settings.smtpUser ? settings.smtpUser : '' %>">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="smtpPass" class="form-label">SMTP Password</label>
+                                            <input type="password" class="form-control" id="smtpPass" name="smtpPass" value="<%= typeof settings !== 'undefined' && settings.smtpPass ? settings.smtpPass : '' %>">
+                                        </div>
+                                        <button type="submit" class="btn btn-info">Save Changes</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%- include("../partials/footer") %>
+        </div>
+    </div>
+</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Handle form submissions
+        document.getElementById("generalSettingsForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            data.registrationOpen = this.elements.registrationOpen.checked; // Handle checkbox
+
+            try {
+                const response = await fetch("/api/admin/settings/general", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    showToast("General settings saved successfully!", "success");
+                } else {
+                    showToast(result.message || "Failed to save general settings.", "error");
+                }
+            } catch (error) {
+                console.error("Error saving general settings:", error);
+                showToast("An error occurred while saving general settings.", "error");
+            }
+        });
+
+        document.getElementById("emailSettingsForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch("/api/admin/settings/email", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    showToast("Email settings saved successfully!", "success");
+                } else {
+                    showToast(result.message || "Failed to save email settings.", "error");
+                }
+            } catch (error) {
+                console.error("Error saving email settings:", error);
+                showToast("An error occurred while saving email settings.", "error");
+            }
+        });
+
+        // Function to load settings (if needed, for initial display)
+        async function loadSettings() {
+            try {
+                const response = await fetch("/api/admin/settings");
+                const result = await response.json();
+                if (result.success && result.settings) {
+                    const settings = result.settings;
+                    document.getElementById("appName").value = settings.appName || "Student Assessment Tracker";
+                    document.getElementById("registrationOpen").checked = settings.registrationOpen || false;
+                    document.getElementById("smtpHost").value = settings.smtpHost || "";
+                    document.getElementById("smtpPort").value = settings.smtpPort || "";
+                    document.getElementById("smtpUser").value = settings.smtpUser || "";
+                    document.getElementById("smtpPass").value = settings.smtpPass || "";
+                }
+            } catch (error) {
+                console.error("Error loading settings:", error);
+            }
+        }
+
+        loadSettings(); // Load settings on page load
+    });
+</script>
+
+

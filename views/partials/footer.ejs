@@ -1,0 +1,198 @@
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light mt-5">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="fw-bold">
+                        <i class="bi bi-mortarboard-fill me-2"></i>
+                        <%= appName %>
+                    </h5>
+                    <p class="text-muted mb-3">
+                        Comprehensive student assessment and performance tracking system for educational institutions.
+                    </p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-light text-decoration-none">
+                            <i class="bi bi-facebook"></i>
+                        </a>
+                        <a href="#" class="text-light text-decoration-none">
+                            <i class="bi bi-twitter"></i>
+                        </a>
+                        <a href="#" class="text-light text-decoration-none">
+                            <i class="bi bi-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-light text-decoration-none">
+                            <i class="bi bi-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <h6 class="fw-bold mb-3">Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <% if (user) { %>
+                            <% if (user.role === 'admin') { %>
+                                <li><a href="/admin/dashboard" class="text-muted text-decoration-none">Dashboard</a></li>
+                                <li><a href="/admin/users" class="text-muted text-decoration-none">User Management</a></li>
+                                <li><a href="/admin/courses" class="text-muted text-decoration-none">Course Management</a></li>
+                                <li><a href="/admin/reports" class="text-muted text-decoration-none">Reports</a></li>
+                            <% } else if (user.role === 'lecturer') { %>
+                                <li><a href="/lecturer/dashboard" class="text-muted text-decoration-none">Dashboard</a></li>
+                                <li><a href="/lecturer/assessments" class="text-muted text-decoration-none">Assessments</a></li>
+                                <li><a href="/lecturer/results" class="text-muted text-decoration-none">Results</a></li>
+                            <% } else if (user.role === 'student') { %>
+                                <li><a href="/student/dashboard" class="text-muted text-decoration-none">Dashboard</a></li>
+                                <li><a href="/student/courses" class="text-muted text-decoration-none">My Courses</a></li>
+                                <li><a href="/student/results" class="text-muted text-decoration-none">My Results</a></li>
+                                <li><a href="/student/analytics" class="text-muted text-decoration-none">Performance Analytics</a></li>
+                            <% } %>
+                        <% } else { %>
+                            <li><a href="/auth/login" class="text-muted text-decoration-none">Login</a></li>
+                            <li><a href="/auth/register" class="text-muted text-decoration-none">Register</a></li>
+                        <% } %>
+                    </ul>
+                </div>
+                
+                <div class="col-md-3">
+                    <h6 class="fw-bold mb-3">Support</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-muted text-decoration-none">Help Center</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Contact Support</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Documentation</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Privacy Policy</a></li>
+                        <li><a href="#" class="text-muted text-decoration-none">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <hr class="my-4 border-secondary">
+            
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="text-muted mb-0">
+                        &copy; <%= currentYear %> <%= appName %>. All rights reserved.
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted mb-0">
+                        Academic Year 2026/27 | Version 1.0.0
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- jQuery (for easier DOM manipulation) -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="/js/common.js"></script>
+    
+    <% if (user) { %>
+        <% if (user.role === 'admin') { %>
+            <script src="/js/admin.js"></script>
+        <% } else if (user.role === 'lecturer') { %>
+            <script src="/js/lecturer.js"></script>
+        <% } else if (user.role === 'student') { %>
+            <script src="/js/student.js"></script>
+        <% } %>
+    <% } %>
+
+    <!-- Auto-hide alerts after 5 seconds -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert:not(.alert-permanent)');
+            alerts.forEach(function(alert) {
+                setTimeout(function() {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                }, 5000);
+            });
+        });
+    </script>
+
+    <!-- Load notifications for authenticated users -->
+    <% if (user) { %>
+    <script>
+        // Load notifications on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNotifications();
+            
+            // Refresh notifications every 5 minutes
+            setInterval(loadNotifications, 300000);
+        });
+
+        function loadNotifications() {
+            fetch('/api/notifications')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.notifications) {
+                        updateNotificationUI(data.notifications);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading notifications:', error);
+                });
+        }
+
+        function updateNotificationUI(notifications) {
+            const badge = document.querySelector('.notification-badge');
+            const list = document.querySelector('.notification-list');
+            
+            if (notifications.length > 0) {
+                badge.textContent = notifications.length;
+                badge.classList.remove('d-none');
+                
+                list.innerHTML = notifications.map(notification => `
+                    <li>
+                        <a class="dropdown-item py-2" href="${notification.link || '#'}">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-${getNotificationIcon(notification.type)} me-2 mt-1 text-${getNotificationColor(notification.type)}"></i>
+                                <div class="flex-grow-1">
+                                    <div class="fw-semibold small">${notification.title}</div>
+                                    <div class="text-muted small">${notification.message}</div>
+                                </div>
+                                ${notification.count ? `<span class="badge bg-${getNotificationColor(notification.type)} rounded-pill">${notification.count}</span>` : ''}
+                            </div>
+                        </a>
+                    </li>
+                `).join('');
+            } else {
+                badge.classList.add('d-none');
+                list.innerHTML = `
+                    <li>
+                        <div class="text-center p-3 text-muted">
+                            <i class="bi bi-bell-slash"></i>
+                            <p class="mb-0 small">No new notifications</p>
+                        </div>
+                    </li>
+                `;
+            }
+        }
+
+        function getNotificationIcon(type) {
+            switch(type) {
+                case 'success': return 'check-circle';
+                case 'warning': return 'exclamation-triangle';
+                case 'error': return 'x-circle';
+                default: return 'info-circle';
+            }
+        }
+
+        function getNotificationColor(type) {
+            switch(type) {
+                case 'success': return 'success';
+                case 'warning': return 'warning';
+                case 'error': return 'danger';
+                default: return 'info';
+            }
+        }
+    </script>
+    <% } %>
+</body>
+</html>
+

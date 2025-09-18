@@ -1,0 +1,297 @@
+/* ===================================
+   THEME SYSTEM - Light & Dark Modes
+   =================================== */
+
+/* Light Theme (Default) */
+:root {
+    /* Primary Colors */
+    --primary-color: #0d6efd;
+    --primary-dark: #0b5ed7;
+    --primary-light: #6ea8fe;
+    
+    /* Secondary Colors */
+    --secondary-color: #6c757d;
+    --secondary-dark: #5c636a;
+    --secondary-light: #adb5bd;
+    
+    /* Role-based Colors */
+    --admin-color: #198754;
+    --admin-light: #d1e7dd;
+    --lecturer-color: #0dcaf0;
+    --lecturer-light: #cff4fc;
+    --student-color: #0d6efd;
+    --student-light: #cfe2ff;
+    
+    /* Status Colors */
+    --success-color: #198754;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --info-color: #0dcaf0;
+    
+    /* Text Colors */
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --text-muted: #adb5bd;
+    --text-inverse: #ffffff;
+    
+    /* Background Colors */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-tertiary: #e9ecef;
+    --bg-dark: #343a40;
+    --bg-card: #ffffff;
+    --bg-sidebar: #ffffff;
+    --bg-navbar: #0d6efd;
+    
+    /* Border Colors */
+    --border-color: #dee2e6;
+    --border-light: #e9ecef;
+    --border-dark: #adb5bd;
+    
+    /* Shadow Variables */
+    --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+    
+    /* Overlay Colors */
+    --overlay-light: rgba(255, 255, 255, 0.9);
+    --overlay-dark: rgba(0, 0, 0, 0.5);
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+    /* Primary Colors (slightly adjusted for dark mode) */
+    --primary-color: #4dabf7;
+    --primary-dark: #339af0;
+    --primary-light: #74c0fc;
+    
+    /* Secondary Colors */
+    --secondary-color: #adb5bd;
+    --secondary-dark: #868e96;
+    --secondary-light: #ced4da;
+    
+    /* Role-based Colors (adjusted for dark mode) */
+    --admin-color: #51cf66;
+    --admin-light: #2b8a3e;
+    --lecturer-color: #22b8cf;
+    --lecturer-light: #1864ab;
+    --student-color: #4dabf7;
+    --student-light: #1864ab;
+    
+    /* Status Colors (adjusted for dark mode) */
+    --success-color: #51cf66;
+    --warning-color: #ffd43b;
+    --danger-color: #ff6b6b;
+    --info-color: #22b8cf;
+    
+    /* Text Colors */
+    --text-primary: #f8f9fa;
+    --text-secondary: #adb5bd;
+    --text-muted: #6c757d;
+    --text-inverse: #212529;
+    
+    /* Background Colors */
+    --bg-primary: #1a1d23;
+    --bg-secondary: #25262b;
+    --bg-tertiary: #2c2e33;
+    --bg-dark: #141517;
+    --bg-card: #25262b;
+    --bg-sidebar: #1a1d23;
+    --bg-navbar: #1a1d23;
+    
+    /* Border Colors */
+    --border-color: #373a40;
+    --border-light: #2c2e33;
+    --border-dark: #495057;
+    
+    /* Shadow Variables (adjusted for dark mode) */
+    --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
+    --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.5);
+    
+    /* Overlay Colors */
+    --overlay-light: rgba(26, 29, 35, 0.9);
+    --overlay-dark: rgba(0, 0, 0, 0.7);
+}
+
+/* Auto Theme - Uses system preference */
+@media (prefers-color-scheme: dark) {
+    [data-theme="auto"] {
+        /* Primary Colors */
+        --primary-color: #4dabf7;
+        --primary-dark: #339af0;
+        --primary-light: #74c0fc;
+        
+        /* Secondary Colors */
+        --secondary-color: #adb5bd;
+        --secondary-dark: #868e96;
+        --secondary-light: #ced4da;
+        
+        /* Role-based Colors */
+        --admin-color: #51cf66;
+        --admin-light: #2b8a3e;
+        --lecturer-color: #22b8cf;
+        --lecturer-light: #1864ab;
+        --student-color: #4dabf7;
+        --student-light: #1864ab;
+        
+        /* Status Colors */
+        --success-color: #51cf66;
+        --warning-color: #ffd43b;
+        --danger-color: #ff6b6b;
+        --info-color: #22b8cf;
+        
+        /* Text Colors */
+        --text-primary: #f8f9fa;
+        --text-secondary: #adb5bd;
+        --text-muted: #6c757d;
+        --text-inverse: #212529;
+        
+        /* Background Colors */
+        --bg-primary: #1a1d23;
+        --bg-secondary: #25262b;
+        --bg-tertiary: #2c2e33;
+        --bg-dark: #141517;
+        --bg-card: #25262b;
+        --bg-sidebar: #1a1d23;
+        --bg-navbar: #1a1d23;
+        
+        /* Border Colors */
+        --border-color: #373a40;
+        --border-light: #2c2e33;
+        --border-dark: #495057;
+        
+        /* Shadow Variables */
+        --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
+        --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.5);
+        
+        /* Overlay Colors */
+        --overlay-light: rgba(26, 29, 35, 0.9);
+        --overlay-dark: rgba(0, 0, 0, 0.7);
+    }
+}
+
+/* Theme Transition */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Theme Toggle Button Styles */
+.theme-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.theme-toggle:hover {
+    background-color: var(--bg-tertiary);
+    transform: scale(1.05);
+    box-shadow: var(--shadow);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
+}
+
+.theme-toggle i {
+    font-size: 18px;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover i {
+    transform: rotate(180deg);
+}
+
+/* Theme Dropdown */
+.theme-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-lg);
+    min-width: 150px;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.theme-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.theme-dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+}
+
+.theme-dropdown-item:hover {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.theme-dropdown-item.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.theme-dropdown-item i {
+    margin-right: 8px;
+    width: 16px;
+    text-align: center;
+}
+
+/* Improved accessibility for high contrast */
+@media (prefers-contrast: high) {
+    :root {
+        --border-color: #000000;
+        --text-primary: #000000;
+        --bg-primary: #ffffff;
+    }
+    
+    [data-theme="dark"] {
+        --border-color: #ffffff;
+        --text-primary: #ffffff;
+        --bg-primary: #000000;
+    }
+}
+
+/* Reduced motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+    
+    .theme-toggle:hover i {
+        transform: none;
+    }
+}
+

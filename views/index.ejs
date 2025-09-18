@@ -1,0 +1,328 @@
+<%- include('partials/header') %>
+
+<!-- Hero Section -->
+<section class="hero-section bg-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center min-vh-75">
+            <div class="col-lg-6">
+                <div class="hero-content">
+                    <h1 class="display-4 fw-bold mb-4">
+                        Student Assessment & Performance Tracker
+                    </h1>
+                    <p class="lead mb-4">
+                        Comprehensive platform for managing student assessments, tracking performance, 
+                        and generating insightful analytics for educational institutions.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="/auth/register" class="btn btn-light btn-lg me-3">
+                            <i class="bi bi-person-plus me-2"></i>
+                            Get Started
+                        </a>
+                        <a href="/auth/login" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>
+                            Sign In
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-image text-center">
+                    <div class="dashboard-preview bg-white rounded-3 shadow-lg p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary rounded-circle p-2 me-3">
+                                <i class="bi bi-mortarboard-fill text-white"></i>
+                            </div>
+                            <h6 class="mb-0 text-dark">Dashboard Preview</h6>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="bg-light rounded p-3 text-center">
+                                    <h4 class="text-primary mb-1">95%</h4>
+                                    <small class="text-muted">Average Score</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="bg-light rounded p-3 text-center">
+                                    <h4 class="text-success mb-1">12</h4>
+                                    <small class="text-muted">Courses</small>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded p-2">
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar bg-primary" style="width: 85%"></div>
+                                    </div>
+                                    <small class="text-muted">Academic Progress</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center mb-5">
+                <h2 class="display-5 fw-bold mb-3">Powerful Features for Modern Education</h2>
+                <p class="lead text-muted">
+                    Everything you need to manage assessments, track student performance, 
+                    and generate meaningful insights.
+                </p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Admin Features -->
+            <div class="col-lg-4">
+                <div class="feature-card h-100 p-4 border rounded-3 hover-shadow">
+                    <div class="feature-icon bg-primary bg-gradient rounded-circle p-3 mb-3">
+                        <i class="bi bi-gear-fill text-white fs-4"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Admin Control</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>User Management</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Course Administration</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>System Reports</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Data Export</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>User Approval System</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Lecturer Features -->
+            <div class="col-lg-4">
+                <div class="feature-card h-100 p-4 border rounded-3 hover-shadow">
+                    <div class="feature-icon bg-info bg-gradient rounded-circle p-3 mb-3">
+                        <i class="bi bi-person-workspace text-white fs-4"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Lecturer Tools</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Create Assessments</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Grade Management</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Student Analytics</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Result Export</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Performance Tracking</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Student Features -->
+            <div class="col-lg-4">
+                <div class="feature-card h-100 p-4 border rounded-3 hover-shadow">
+                    <div class="feature-icon bg-success bg-gradient rounded-circle p-3 mb-3">
+                        <i class="bi bi-mortarboard-fill text-white fs-4"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Student Portal</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>View Results</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Performance Charts</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Course Progress</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Download Reports</li>
+                        <li class="mb-2"><i class="bi bi-check-circle text-success me-2"></i>Analytics Dashboard</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Statistics Section -->
+<section class="stats-section bg-light py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stat-item">
+                    <div class="stat-number display-4 fw-bold text-primary">100+</div>
+                    <div class="stat-label text-muted">Students Tracked</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stat-item">
+                    <div class="stat-number display-4 fw-bold text-info">30+</div>
+                    <div class="stat-label text-muted">Active Courses</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stat-item">
+                    <div class="stat-number display-4 fw-bold text-success">120+</div>
+                    <div class="stat-label text-muted">Assessments Created</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="stat-item">
+                    <div class="stat-number display-4 fw-bold text-warning">98%</div>
+                    <div class="stat-label text-muted">User Satisfaction</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="how-it-works py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center mb-5">
+                <h2 class="display-5 fw-bold mb-3">How It Works</h2>
+                <p class="lead text-muted">
+                    Get started in three simple steps and transform your educational assessment process.
+                </p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-4 text-center">
+                <div class="step-item">
+                    <div class="step-number bg-primary text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <span class="fw-bold fs-4">1</span>
+                    </div>
+                    <h4 class="fw-bold mb-3">Register & Get Approved</h4>
+                    <p class="text-muted">
+                        Create your account and wait for admin approval. Students and lecturers 
+                        need approval before accessing the system.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 text-center">
+                <div class="step-item">
+                    <div class="step-number bg-info text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <span class="fw-bold fs-4">2</span>
+                    </div>
+                    <h4 class="fw-bold mb-3">Access Your Dashboard</h4>
+                    <p class="text-muted">
+                        Once approved, access your role-specific dashboard with all the tools 
+                        you need for assessment management.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 text-center">
+                <div class="step-item">
+                    <div class="step-number bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <span class="fw-bold fs-4">3</span>
+                    </div>
+                    <h4 class="fw-bold mb-3">Track & Analyze</h4>
+                    <p class="text-muted">
+                        Create assessments, track performance, and generate detailed analytics 
+                        to improve educational outcomes.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section bg-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h2 class="display-6 fw-bold mb-3">Ready to Transform Your Assessment Process?</h2>
+                <p class="lead mb-0">
+                    Join hundreds of educators already using our platform to track student performance 
+                    and improve educational outcomes.
+                </p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="/auth/register" class="btn btn-light btn-lg">
+                    <i class="bi bi-rocket-takeoff me-2"></i>
+                    Start Free Today
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.hero-section {
+    background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+}
+
+.min-vh-75 {
+    min-height: 75vh;
+}
+
+.hover-shadow {
+    transition: all 0.3s ease;
+}
+
+.hover-shadow:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard-preview {
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.stat-item {
+    padding: 2rem 1rem;
+}
+
+.step-item {
+    padding: 2rem 1rem;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-content {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.dashboard-preview {
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 3rem 0;
+    }
+    
+    .display-4 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-buttons {
+        text-align: center;
+    }
+    
+    .hero-buttons .btn {
+        display: block;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+    
+    .hero-buttons .btn:last-child {
+        margin-bottom: 0;
+    }
+}
+</style>
+
+<%- include('partials/footer') %>
+

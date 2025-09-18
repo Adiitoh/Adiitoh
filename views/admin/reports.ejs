@@ -1,0 +1,136 @@
+<%- include("../partials/header") %>
+
+<div class="d-flex">
+    <%- include("../partials/admin-sidebar") %>
+    
+    <div class="main-content flex-grow-1">
+        <div class="container-fluid py-4">
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 mb-0">System Reports</h1>
+                    <p class="text-muted">Generate and view various system reports</p>
+                </div>
+            </div>
+
+            <!-- Report Options -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-graph-up me-2"></i>Generate Reports
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="report-option card h-100 text-center p-3">
+                                <div class="card-body">
+                                    <i class="bi bi-person-check display-4 text-primary mb-3"></i>
+                                    <h5 class="card-title">User Activity Report</h5>
+                                    <p class="card-text">Detailed report on user logins, registrations, and key actions.</p>
+                                    <button class="btn btn-primary mt-3" onclick="AdminModule.reports.generateReport("user_activity")">
+                                        <i class="bi bi-file-earmark-bar-graph me-1"></i>Generate Report
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="report-option card h-100 text-center p-3">
+                                <div class="card-body">
+                                    <i class="bi bi-book display-4 text-success mb-3"></i>
+                                    <h5 class="card-title">Course Enrollment Report</h5>
+                                    <p class="card-text">Overview of student enrollments per course and lecturer assignments.</p>
+                                    <button class="btn btn-success mt-3" onclick="AdminModule.reports.generateReport("course_enrollment")">
+                                        <i class="bi bi-file-earmark-bar-graph me-1"></i>Generate Report
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="report-option card h-100 text-center p-3">
+                                <div class="card-body">
+                                    <i class="bi bi-clipboard-data display-4 text-warning mb-3"></i>
+                                    <h5 class="card-title">Assessment Performance Report</h5>
+                                    <p class="card-text">Aggregate performance data for all assessments across the system.</p>
+                                    <button class="btn btn-warning mt-3" onclick="AdminModule.reports.generateReport("assessment_performance")">
+                                        <i class="bi bi-file-earmark-bar-graph me-1"></i>Generate Report
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="report-option card h-100 text-center p-3">
+                                <div class="card-body">
+                                    <i class="bi bi-pie-chart display-4 text-info mb-3"></i>
+                                    <h5 class="card-title">Student Progress Report</h5>
+                                    <p class="card-text">Track overall student progress and identify areas for improvement.</p>
+                                    <button class="btn btn-info mt-3" onclick="AdminModule.reports.generateReport("student_progress")">
+                                        <i class="bi bi-file-earmark-bar-graph me-1"></i>Generate Report
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="report-option card h-100 text-center p-3">
+                                <div class="card-body">
+                                    <i class="bi bi-shield-check display-4 text-danger mb-3"></i>
+                                    <h5 class="card-title">Security Audit Report</h5>
+                                    <p class="card-text">Review security-related events and potential vulnerabilities.</p>
+                                    <button class="btn btn-danger mt-3" onclick="AdminModule.reports.generateReport("security_audit")">
+                                        <i class="bi bi-file-earmark-bar-graph me-1"></i>Generate Report
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="report-option card h-100 text-center p-3">
+                                <div class="card-body">
+                                    <i class="bi bi-activity display-4 text-secondary mb-3"></i>
+                                    <h5 class="card-title">System Health Report</h5>
+                                    <p class="card-text">Monitor system performance, uptime, and resource utilization.</p>
+                                    <button class="btn btn-secondary mt-3" onclick="AdminModule.reports.generateReport("system_health")">
+                                        <i class="bi bi-file-earmark-bar-graph me-1"></i>Generate Report
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Generated Reports Section (Optional - for displaying generated reports) -->
+            <div class="card border-0 shadow-sm d-none" id="generatedReportsSection">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-journal-text me-2"></i>Generated Reports
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div id="reportsDisplayArea">
+                        <!-- Reports will be displayed here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.report-option {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.report-option:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Any specific JS for this page
+    });
+</script>
+
+<%- include("../partials/footer") %>
+

@@ -1,0 +1,153 @@
+<%- include("../partials/header") %>
+
+<div class="d-flex">
+    <%- include("../partials/lecturer-sidebar") %>
+    
+    <div class="main-content flex-grow-1">
+        <div class="container-fluid py-4">
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 mb-0">Assessment Results: <%= assessment.title %></h1>
+                    <p class="text-muted">Overview of student performance for this assessment</p>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="LecturerModule.results.exportAssessmentResults(pdf)">
+                        <i class="bi bi-download me-1"></i>Download PDF
+                    </button>
+                    <button class="btn btn-outline-primary" onclick="LecturerModule.results.exportAssessmentResults(csv)">
+                        <i class="bi bi-file-earmark-spreadsheet me-1"></i>Export CSV
+                    </button>
+                    <a href="/lecturer/assessments" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-1"></i>Back to Assessments
+                    </a>
+                </div>
+            </div>
+
+            <!-- Performance Overview -->
+            <div class="row mb-4">
+                <div class="col-lg-8">
+                    <!-- Score Distribution Chart -->
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="bi bi-bar-chart me-2"></i>Score Distribution
+                            </h5>
+                            <small class="text-muted">Distribution of scores across all students</small>
+                        </div>
+                        <div class="card-body d-flex align-items-center justify-content-center">
+                            <div style="width: 100%; max-width: 600px; height: 300px;">
+                                <canvas id="scoreDistributionChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <!-- Assessment Summary -->
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="bi bi-info-circle me-2"></i>Assessment Summary
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Total Students:
+                                    <span class="badge bg-primary rounded-pill" id="totalStudents">0</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Average Score:
+                                    <span class="badge bg-success rounded-pill" id="averageScore">0%</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Highest Score:
+                                    <span class="badge bg-info rounded-pill" id="highestScore">0%</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Lowest Score:
+                                    <span class="badge bg-danger rounded-pill" id="lowestScore">0%</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Passing Rate:
+                                    <span class="badge bg-warning rounded-pill" id="passingRate">0%</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Results Table -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="bi bi-table me-2"></i>Student Results
+                    </h5>
+                    <div class="input-group w-25">
+                        <input type="text" class="form-control" id="studentSearch" placeholder="Search student...">
+                        <button class="btn btn-outline-secondary" type="button" id="searchButton"><i class="bi bi-search"></i></button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="studentResultsTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>Score</th>
+                                    <th>Grade</th>
+                                    <th>Status</th>
+                                    <th>Submitted On</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (typeof results !== 'undefined' && results.length > 0) { %>
+                                    <% results.forEach(result => { %>
+                                        <tr>
+                                            <td><%= result.student_name %></td>
+                                            <td><%= result.score %> / <%= assessment.max_score %></td>
+                                            <td><span class="badge bg-<%= result.grade_color %>"><%= result.grade %></span></td>
+                                            <td><%= result.status %></td>
+                                            <td><%= new Date(result.submitted_at).toLocaleString() %></td>
+                                            <td>
+                                                <a href="/lecturer/results/edit/<%= result.id %>" class="btn btn-sm btn-outline-primary me-1" title="Edit Result">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <button class="btn btn-sm btn-outline-info" title="View Details" onclick="LecturerModule.results.viewStudentDetails("<%= result.id %>")">
+                                                    <i class="bi bi-eye"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="6" class="text-center py-4">
+                                            <i class="bi bi-exclamation-circle display-4 text-muted mb-3"></i>
+                                            <p class="text-muted">No results found for this assessment yet.</p>
+                                        </td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Add any specific styles for this page here */
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        LecturerModule.results.initAssessmentResultsPage();
+    });
+</script>
+
+<%- include("../partials/footer") %>
+

@@ -1,0 +1,317 @@
+<!-- Admin Sidebar -->
+<div class="admin-sidebar bg-light border-end" id="adminSidebar">
+    <div class="sidebar-header p-3 border-bottom">
+        <h5 class="mb-0 text-primary fw-bold">
+            <i class="bi bi-gear-fill me-2"></i>
+            Admin Panel
+        </h5>
+    </div>
+    
+    <div class="sidebar-content">
+        <nav class="nav flex-column p-3">
+            <!-- Dashboard -->
+            <a href="/admin/dashboard" class="nav-link <%= currentPath === '/admin/dashboard' ? 'active' : '' %>">
+                <i class="bi bi-speedometer2 me-2"></i>
+                Dashboard
+            </a>
+            
+            <!-- User Management -->
+            <div class="nav-section">
+                <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">USER MANAGEMENT</h6>
+                
+                <a href="/admin/users" class="nav-link <%= currentPath.startsWith('/admin/users') ? 'active' : '' %>">
+                    <i class="bi bi-people me-2"></i>
+                    All Users
+                    <span class="badge bg-secondary ms-auto user-count">0</span>
+                </a>
+                
+                <a href="/admin/pending-approvals" class="nav-link <%= currentPath.startsWith('/admin/pending-approvals') ? 'active' : '' %>">
+                    <i class="bi bi-clock-history me-2"></i>
+                    Pending Approvals
+                    <span class="badge bg-warning ms-auto pending-count">0</span>
+                </a>
+                
+                <a href="/admin/add-administrator" class="nav-link <%= currentPath.startsWith("/admin/add-administrator") ? "active" : "" %>">
+                    <i class="bi bi-person-plus me-2"></i>
+                    Add Administrator
+                </a>
+            </div>
+            
+            <!-- Course Management -->
+            <div class="nav-section">
+                <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">COURSE MANAGEMENT</h6>
+                
+                <a href="/admin/courses" class="nav-link <%= currentPath.startsWith('/admin/courses') ? 'active' : '' %>">
+                    <i class="bi bi-book me-2"></i>
+                    All Courses
+                    <span class="badge bg-info ms-auto course-count">0</span>
+                </a>
+                
+                <a href="/admin/edit-courses" class="nav-link <%= currentPath.startsWith('/admin/edit-courses') ? 'active' : '' %>">
+                    <i class="bi bi-pencil-square me-2"></i>
+                    Edit Courses
+                </a>
+            </div>
+            
+            <!-- Reports & Analytics -->
+            <div class="nav-section">
+                <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">REPORTS & ANALYTICS</h6>
+                
+                <a href="/admin/reports" class="nav-link <%= currentPath.startsWith('/admin/reports') ? 'active' : '' %>">
+                    <i class="bi bi-graph-up me-2"></i>
+                    System Reports
+                </a>
+                
+                <a href="/admin/export" class="nav-link <%= currentPath.startsWith('/admin/export') ? 'active' : '' %>">
+                    <i class="bi bi-download me-2"></i>
+                    Export Data
+                </a>
+                
+                <a href="/admin/logs" class="nav-link <%= currentPath.startsWith('/admin/logs') ? 'active' : '' %>">
+                    <i class="bi bi-journal-text me-2"></i>
+                    System Logs
+                </a>
+            </div>
+            
+            <!-- System Settings -->
+            <div class="nav-section">
+                <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">SYSTEM</h6>
+                
+                <a href="/admin/settings" class="nav-link <%= currentPath.startsWith('/admin/settings') ? 'active' : '' %>">
+                    <i class="bi bi-gear me-2"></i>
+                    Settings
+                </a>
+                
+                <a href="/admin/backup" class="nav-link <%= currentPath.startsWith('/admin/backup') ? 'active' : '' %>">
+                    <i class="bi bi-cloud-arrow-down me-2"></i>
+                    Backup & Restore
+                </a>
+            </div>
+        </nav>
+    </div>
+    
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer p-3 border-top mt-auto">
+        <div class="d-flex align-items-center">
+            <div class="flex-grow-1">
+                <small class="text-muted">System Status</small>
+                <div class="d-flex align-items-center">
+                    <span class="status-indicator bg-success rounded-circle me-2"></span>
+                    <small class="text-success fw-semibold">Online</small>
+                </div>
+            </div>
+            <button class="btn btn-sm btn-outline-secondary" id="refreshStats" title="Refresh Statistics">
+                <i class="bi bi-arrow-clockwise"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Sidebar Toggle Button (Mobile) -->
+<button class="btn btn-primary d-lg-none sidebar-toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebarOffcanvas">
+    <i class="bi bi-list"></i>
+</button>
+
+<!-- Offcanvas Sidebar for Mobile -->
+<div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="adminSidebarOffcanvas">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title text-primary fw-bold">
+            <i class="bi bi-gear-fill me-2"></i>
+            Admin Panel
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+        <nav class="nav flex-column p-3">
+            <!-- Same navigation items as desktop sidebar -->
+            <a href="/admin/dashboard" class="nav-link <%= currentPath === '/admin/dashboard' ? 'active' : '' %>">
+                <i class="bi bi-speedometer2 me-2"></i>Dashboard
+            </a>
+            
+            <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">USER MANAGEMENT</h6>
+            <a href="/admin/users" class="nav-link <%= currentPath.startsWith('/admin/users') ? 'active' : '' %>">
+                <i class="bi bi-people me-2"></i>All Users
+            </a>
+            <a href="/admin/pending-approvals" class="nav-link <%= currentPath.startsWith('/admin/pending-approvals') ? 'active' : '' %>">
+                <i class="bi bi-clock-history me-2"></i>Pending Approvals
+            </a>
+            <a href="/admin/add-admin" class="nav-link <%= currentPath.startsWith('/admin/add-admin') ? 'active' : '' %>">
+                <i class="bi bi-person-plus me-2"></i>Add Administrator
+            </a>
+            
+            <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">COURSE MANAGEMENT</h6>
+            <a href="/admin/courses" class="nav-link <%= currentPath.startsWith('/admin/courses') ? 'active' : '' %>">
+                <i class="bi bi-book me-2"></i>All Courses
+            </a>
+            <a href="/admin/edit-courses" class="nav-link <%= currentPath.startsWith('/admin/edit-courses') ? 'active' : '' %>">
+                <i class="bi bi-pencil-square me-2"></i>Edit Courses
+            </a>
+            
+            <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">REPORTS & ANALYTICS</h6>
+            <a href="/admin/reports" class="nav-link <%= currentPath.startsWith('/admin/reports') ? 'active' : '' %>">
+                <i class="bi bi-graph-up me-2"></i>System Reports
+            </a>
+            <a href="/admin/export" class="nav-link <%= currentPath.startsWith('/admin/export') ? 'active' : '' %>">
+                <i class="bi bi-download me-2"></i>Export Data
+            </a>
+            <a href="/admin/logs" class="nav-link <%= currentPath.startsWith('/admin/logs') ? 'active' : '' %>">
+                <i class="bi bi-journal-text me-2"></i>System Logs
+            </a>
+            
+            <h6 class="nav-section-title text-muted small fw-bold mt-3 mb-2">SYSTEM</h6>
+            <a href="/admin/settings" class="nav-link <%= currentPath.startsWith('/admin/settings') ? 'active' : '' %>">
+                <i class="bi bi-gear me-2"></i>Settings
+            </a>
+            <a href="/admin/backup" class="nav-link <%= currentPath.startsWith('/admin/backup') ? 'active' : '' %>">
+                <i class="bi bi-cloud-arrow-down me-2"></i>Backup & Restore
+            </a>
+        </nav>
+    </div>
+</div>
+
+<style>
+.admin-sidebar {
+    width: 280px;
+    height: calc(100vh - 56px); /* Adjust for navbar height */
+    position: fixed;
+    top: 56px; /* Navbar height */
+    left: 0;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.sidebar-content {
+    flex: 1;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+}
+
+.nav-link {
+    color: #6c757d;
+    padding: 0.75rem 1rem;
+    border-radius: 0.375rem;
+    margin-bottom: 0.25rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.nav-link:hover {
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+.nav-link.active {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.nav-link.active:hover {
+    background-color: #0b5ed7;
+    color: white;
+}
+
+.nav-section-title {
+    padding: 0 1rem;
+    letter-spacing: 0.05em;
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+}
+
+.sidebar-toggle {
+    position: fixed;
+    top: 70px;
+    left: 15px;
+    z-index: 1050;
+}
+
+/* Main content adjustment when sidebar is visible */
+@media (min-width: 992px) {
+    .main-content {
+        margin-left: 280px;
+    }
+}
+
+/* Badge styles */
+.badge {
+    font-size: 0.7em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+    .admin-sidebar {
+        display: none;
+    }
+    
+    .main-content {
+        margin-left: 0;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Load sidebar statistics
+    loadSidebarStats();
+    
+    // Refresh stats button
+    document.getElementById('refreshStats')?.addEventListener('click', function() {
+        loadSidebarStats();
+        this.innerHTML = '<i class="bi bi-arrow-clockwise spin"></i>';
+        setTimeout(() => {
+            this.innerHTML = '<i class="bi bi-arrow-clockwise"></i>';
+        }, 1000);
+    });
+});
+
+function loadSidebarStats() {
+    // Load user statistics
+    fetch('/api/stats/users')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.querySelector('.user-count').textContent = data.stats.total;
+                document.querySelector('.pending-count').textContent = data.stats.pending;
+                
+                // Update badge colors based on pending count
+                const pendingBadge = document.querySelector('.pending-count');
+                if (data.stats.pending > 0) {
+                    pendingBadge.className = 'badge bg-warning ms-auto pending-count';
+                } else {
+                    pendingBadge.className = 'badge bg-secondary ms-auto pending-count';
+                }
+            }
+        })
+        .catch(error => console.error('Error loading user stats:', error));
+    
+    // Load course statistics
+    fetch('/api/stats/courses')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.querySelector('.course-count').textContent = data.stats.total;
+            }
+        })
+        .catch(error => console.error('Error loading course stats:', error));
+}
+
+// Add spin animation for refresh button
+const style = document.createElement('style');
+style.textContent = `
+    .spin {
+        animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+`;
+document.head.appendChild(style);
+</script>
+

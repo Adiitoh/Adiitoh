@@ -1,0 +1,194 @@
+<%- include("../partials/header") %>
+
+<body class="dashboard-page">
+    <div class="dashboard-layout">
+        <%- include("../partials/lecturer-sidebar") %>
+        <div class="dashboard-content">
+            <div class="main-content flex-grow-1">
+                <div class="container-fluid py-4">
+            <!-- Welcome Header -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="welcome-banner bg-gradient-primary text-white rounded-3 p-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h1 class="h3 mb-2">Welcome back, <%= user.first_name %>!</h1>
+                                <p class="mb-0 opacity-75">Manage your courses, assessments, and student performance</p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <i class="bi bi-mortarboard-fill display-4 opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <div class="stat-icon text-primary mb-2">
+                                <i class="bi bi-book fs-1"></i>
+                            </div>
+                            <h4 class="fw-bold mb-1" id="totalCourses">0</h4>
+                            <small class="text-muted">My Courses</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <div class="stat-icon text-success mb-2">
+                                <i class="bi bi-people fs-1"></i>
+                            </div>
+                            <h4 class="fw-bold mb-1" id="totalStudents">0</h4>
+                            <small class="text-muted">Total Students</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <div class="stat-icon text-warning mb-2">
+                                <i class="bi bi-clipboard-check fs-1"></i>
+                            </div>
+                            <h4 class="fw-bold mb-1" id="activeAssessments">0</h4>
+                            <small class="text-muted">Active Assessments</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card card border-0 shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <div class="stat-icon text-info mb-2">
+                                <i class="bi bi-hourglass-split fs-1"></i>
+                            </div>
+                            <h4 class="fw-bold mb-1" id="pendingGrading">0</h4>
+                            <small class="text-muted">Pending Grading</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Dashboard Content -->
+            <div class="row">
+                <!-- Left Column -->
+                <div class="col-lg-8">
+                    <!-- Class Performance Chart -->
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                <i class="bi bi-bar-chart me-2"></i>Class Performance Overview
+                            </h5>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-primary active" data-period="month">Month</button>
+                                <button class="btn btn-outline-primary" data-period="semester">Semester</button>
+                                <button class="btn btn-outline-primary" data-period="year">Year</button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="classPerformanceChart" height="300"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                <i class="bi bi-activity me-2"></i>Recent Activity
+                            </h5>
+                            <a href="#" class="btn btn-sm btn-outline-primary">
+                                View All <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <div id="recentActivity">
+                                <!-- Recent activity will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="col-lg-4">
+                    <!-- Upcoming Deadlines -->
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="bi bi-calendar-event me-2"></i>Upcoming Deadlines
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="upcomingDeadlines">
+                                <!-- Upcoming deadlines will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="bi bi-lightning me-2"></i>Quick Actions
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-grid gap-2">
+                                <a href="/lecturer/assessments/create" class="btn btn-primary">
+                                    <i class="bi bi-plus-circle me-2"></i>Create New Assessment
+                                </a>
+                                <a href="/lecturer/assessments" class="btn btn-outline-primary">
+                                    <i class="bi bi-clipboard-check me-2"></i>Manage Assessments
+                                </a>
+                                <a href="/lecturer/results" class="btn btn-outline-success">
+                                    <i class="bi bi-clipboard-data me-2"></i>View All Results
+                                </a>
+                                <button class="btn btn-outline-info" onclick="LecturerModule.dashboard.refresh()">
+                                    <i class="bi bi-arrow-clockwise me-2"></i>Refresh Dashboard
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.welcome-banner {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.stat-card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.activity-item .activity-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.deadline-item {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.deadline-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+}
+</style>
+
+<%- include("../partials/footer") %>
+
+
+

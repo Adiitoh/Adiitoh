@@ -1,0 +1,424 @@
+<%- include("../partials/header") %>
+
+<div class="d-flex">
+    <%- include("../partials/student-sidebar") %>
+    
+    <div class="main-content flex-grow-1">
+        <div class="container-fluid py-4">
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 mb-0">My Results</h1>
+                    <p class="text-muted">View your assessment results and performance analytics</p>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="StudentModule.results.exportResults('pdf')">
+                        <i class="bi bi-download me-1"></i>Download PDF
+                    </button>
+                    <button class="btn btn-outline-primary" onclick="StudentModule.results.exportResults('csv')">
+                        <i class="bi bi-file-earmark-spreadsheet me-1"></i>Export CSV
+                    </button>
+                    <button class="btn btn-outline-secondary" onclick="StudentModule.results.loadResults()">
+                        <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Performance Overview -->
+            <div class="row mb-4">
+                <div class="col-lg-8">
+                    <!-- Results Chart -->
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="bi bi-pie-chart me-2"></i>Performance Distribution
+                            </h5>
+                            <small class="text-muted">Your performance across different grade levels</small>
+                        </div>
+                        <div class="card-body d-flex align-items-center justify-content-center">
+                            <div style="width: 100%; max-width: 400px; height: 400px;">
+                                <canvas id="resultsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <!-- Performance Summary -->
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="bi bi-graph-up me-2"></i>Performance Summary
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="performance-metric mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-muted">Overall Average</span>
+                                    <span class="fw-bold fs-4" id="overallAverage">0%</span>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-primary" id="overallAverageBar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="performance-metric mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-muted">Highest Score</span>
+                                    <span class="fw-bold text-success" id="highestScore">0%</span>
+                                </div>
+                            </div>
+                            
+                            <div class="performance-metric mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-muted">Lowest Score</span>
+                                    <span class="fw-bold text-danger" id="lowestScore">0%</span>
+                                </div>
+                            </div>
+                            
+                            <div class="performance-metric mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-muted">Total Assessments</span>
+                                    <span class="fw-bold" id="totalAssessments">0</span>
+                                </div>
+                            </div>
+                            
+                            <div class="performance-metric">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-muted">Improvement Trend</span>
+                                    <span class="fw-bold" id="improvementTrend">
+                                        <i class="bi bi-arrow-up text-success"></i> +5%
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters and Search -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Search Results</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-search"></i>
+                                </span>
+                                <input type="text" class="form-control" id="resultSearch" placeholder="Search by assessment or course...">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Course</label>
+                            <select class="form-select result-filter" name="course">
+                                <option value="">All Courses</option>
+                                <!-- Courses will be populated dynamically -->
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Grade</label>
+                            <select class="form-select result-filter" name="grade">
+                                <option value="">All Grades</option>
+                                <option value="A">A (90-100%)</option>
+                                <option value="B">B (80-89%)</option>
+                                <option value="C">C (70-79%)</option>
+                                <option value="D">D (60-69%)</option>
+                                <option value="F">F (Below 60%)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Date Range</label>
+                            <select class="form-select result-filter" name="date_range">
+                                <option value="">All Time</option>
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                                <option value="semester">This Semester</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">&nbsp;</label>
+                            <button class="btn btn-outline-secondary w-100" onclick="StudentModule.results.clearFilters()">
+                                <i class="bi bi-x-circle me-1"></i>Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Table -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="bi bi-clipboard-data me-2"></i>Assessment Results
+                    </h5>
+                    <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-primary active" data-view="table">
+                            <i class="bi bi-table"></i> Table
+                        </button>
+                        <button class="btn btn-outline-primary" data-view="cards">
+                            <i class="bi bi-grid"></i> Cards
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Table View -->
+                    <div id="tableView">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="resultsTable">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Assessment</th>
+                                        <th>Score</th>
+                                        <th>Grade</th>
+                                        <th>Performance</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Results will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Cards View -->
+                    <div id="cardsView" class="d-none">
+                        <div class="row" id="resultsCards">
+                            <!-- Result cards will be loaded here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <nav aria-label="Results pagination" class="mt-3">
+                        <ul class="pagination justify-content-center" id="resultsPagination">
+                            <!-- Pagination will be generated here -->
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Subject Performance Modal -->
+<div class="modal fade" id="subjectPerformanceModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-graph-up me-2"></i>Subject Performance Analysis
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="fw-semibold mb-3">Performance by Subject</h6>
+                        <canvas id="subjectPerformanceChart" height="300"></canvas>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-semibold mb-3">Strengths & Areas for Improvement</h6>
+                        <div id="subjectAnalysis">
+                            <!-- Subject analysis will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="StudentModule.results.exportSubjectAnalysis()">
+                    <i class="bi bi-download me-1"></i>Download Analysis
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.performance-metric {
+    padding: 1rem 0;
+    border-bottom: 1px solid #f8f9fa;
+}
+
+.performance-metric:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.result-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.result-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+}
+
+.grade-display-sm {
+    font-size: 0.875rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    display: inline-block;
+    min-width: 50px;
+    text-align: center;
+}
+
+.performance-indicator {
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.performance-indicator.excellent {
+    color: #198754;
+}
+
+.performance-indicator.good {
+    color: #0dcaf0;
+}
+
+.performance-indicator.average {
+    color: #ffc107;
+}
+
+.performance-indicator.poor {
+    color: #dc3545;
+}
+
+.view-toggle {
+    transition: all 0.2s ease;
+}
+
+.btn-group .btn.active {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .performance-metric {
+        padding: 0.75rem 0;
+    }
+    
+    .btn-group {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .btn-group .btn {
+        border-radius: 0.375rem !important;
+        margin-bottom: 0.25rem;
+    }
+}
+
+/* Chart container responsive */
+.chart-container {
+    position: relative;
+    height: 400px;
+    width: 100%;
+}
+
+@media (max-width: 576px) {
+    .chart-container {
+        height: 300px;
+    }
+}
+
+/* Custom scrollbar for table */
+.table-responsive::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Loading animation */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #0d6efd;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Empty state styling */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.empty-state h6 {
+    margin-bottom: 0.5rem;
+    color: #495057;
+}
+
+.empty-state p {
+    margin-bottom: 0;
+    font-size: 0.875rem;
+}
+</style>
+
+<script>
+// Initialize tooltips
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Bootstrap tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+    
+    // View toggle functionality
+    const viewButtons = document.querySelectorAll('[data-view]');
+    const tableView = document.getElementById('tableView');
+    const cardsView = document.getElementById('cardsView');
+    
+    viewButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const view = this.dataset.view;
+            
+            // Update active button
+            viewButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Toggle views
+            if (view === 'table') {
+                tableView.classList.remove('d-none');
+                cardsView.classList.add('d-none');
+            } else {
+                tableView.classList.add('d-none');
+                cardsView.classList.remove('d-none');
+            }
+        });
+    });
+});
+</script>
+
+<%- include('../partials/footer') %>
+

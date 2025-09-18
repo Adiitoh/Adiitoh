@@ -1,0 +1,359 @@
+<%- include('partials/header') %>
+
+<div class="auth-container min-vh-100 d-flex align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-7">
+                <div class="auth-card card shadow-lg border-0">
+                    <div class="card-body p-5">
+                        <!-- Header -->
+                        <div class="text-center mb-4">
+                            <div class="auth-logo mb-3">
+                                <i class="bi bi-mortarboard-fill text-primary" style="font-size: 3rem;"></i>
+                            </div>
+                            <h2 class="fw-bold text-dark mb-2">Welcome Back</h2>
+                            <p class="text-muted">Sign in to your account to continue</p>
+                        </div>
+
+                        <!-- Login Form -->
+                        <form action="/auth/login" method="POST" id="loginForm">
+                            <div class="mb-3">
+                                <label for="email" class="form-label fw-semibold">Email Address</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="bi bi-envelope text-muted"></i>
+                                    </span>
+                                    <input 
+                                        type="email" 
+                                        class="form-control border-start-0 ps-0" 
+                                        id="email" 
+                                        name="email" 
+                                        placeholder="Enter your email"
+                                        required
+                                        autocomplete="email"
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label fw-semibold">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0">
+                                        <i class="bi bi-lock text-muted"></i>
+                                    </span>
+                                    <input 
+                                        type="password" 
+                                        class="form-control border-start-0 border-end-0 ps-0" 
+                                        id="password" 
+                                        name="password" 
+                                        placeholder="Enter your password"
+                                        required
+                                        autocomplete="current-password"
+                                    >
+                                    <button 
+                                        class="btn btn-outline-secondary border-start-0" 
+                                        type="button" 
+                                        id="togglePassword"
+                                        tabindex="-1"
+                                    >
+                                        <i class="bi bi-eye" id="togglePasswordIcon"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe">
+                                    <label class="form-check-label text-muted" for="rememberMe">
+                                        Remember me
+                                    </label>
+                                </div>
+                                <a href="/auth/forgot-password" class="text-decoration-none">
+                                    Forgot password?
+                                </a>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold" id="loginBtn">
+                                <span class="btn-text">
+                                    <i class="bi bi-box-arrow-in-right me-2"></i>
+                                    Sign In
+                                </span>
+                                <span class="btn-loading d-none">
+                                    <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                                    Signing in...
+                                </span>
+                            </button>
+                        </form>
+
+                        <!-- Divider -->
+                        <div class="divider my-4">
+                            <span class="divider-text text-muted bg-white px-3">or</span>
+                        </div>
+
+                        <!-- Register Link -->
+                        <div class="text-center">
+                            <p class="text-muted mb-0">
+                                Don't have an account? 
+                                <a href="/auth/register" class="text-decoration-none fw-semibold">
+                                    Create one here
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Demo Accounts Info -->
+                <div class="demo-info card mt-4 border-0 bg-light">
+                    <div class="card-body p-4">
+                        <h6 class="fw-bold text-dark mb-3">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Demo Accounts
+                        </h6>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="demo-account">
+                                    <strong class="text-primary">Admin</strong>
+                                    <br>
+                                    <small class="text-muted">admin@studenttracker.com</small>
+                                    <br>
+                                    <small class="text-muted">Password: admin123</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="demo-account">
+                                    <strong class="text-info">Lecturer</strong>
+                                    <br>
+                                    <small class="text-muted">lecturer@demo.com</small>
+                                    <br>
+                                    <small class="text-muted">Password: demo123</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="demo-account">
+                                    <strong class="text-success">Student</strong>
+                                    <br>
+                                    <small class="text-muted">student@demo.com</small>
+                                    <br>
+                                    <small class="text-muted">Password: demo123</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.auth-container {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+}
+
+.auth-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="1" fill="white" opacity="0.1"/><circle cx="10" cy="50" r="1" fill="white" opacity="0.1"/><circle cx="90" cy="30" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.auth-card {
+    border-radius: 1rem;
+    backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 1;
+}
+
+.auth-logo {
+    animation: fadeInDown 0.8s ease-out;
+}
+
+.card-body {
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.input-group-text {
+    border-color: #e9ecef;
+}
+
+.form-control {
+    border-color: #e9ecef;
+    padding: 0.75rem 1rem;
+}
+
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.divider {
+    position: relative;
+    text-align: center;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #dee2e6;
+}
+
+.divider-text {
+    position: relative;
+    z-index: 1;
+}
+
+.demo-info {
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.demo-account {
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    background: white;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.demo-account:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Loading state */
+.btn-loading .btn-text {
+    display: none;
+}
+
+.btn:not(.loading) .btn-loading {
+    display: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .auth-card {
+        margin: 1rem;
+    }
+    
+    .card-body {
+        padding: 2rem !important;
+    }
+    
+    .demo-info {
+        margin: 1rem;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    const togglePasswordIcon = document.getElementById('togglePasswordIcon');
+
+    // Password toggle functionality
+    togglePassword.addEventListener('click', function() {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        
+        if (type === 'text') {
+            togglePasswordIcon.className = 'bi bi-eye-slash';
+        } else {
+            togglePasswordIcon.className = 'bi bi-eye';
+        }
+    });
+
+    // Form submission with loading state
+    loginForm.addEventListener('submit', function(e) {
+        loginBtn.classList.add('loading');
+        loginBtn.disabled = true;
+        
+        // Show loading state
+        loginBtn.querySelector('.btn-text').classList.add('d-none');
+        loginBtn.querySelector('.btn-loading').classList.remove('d-none');
+    });
+
+    // Demo account quick login
+    document.querySelectorAll('.demo-account').forEach(account => {
+        account.addEventListener('click', function() {
+            const email = this.querySelector('small').textContent;
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            
+            emailInput.value = email;
+            
+            // Set demo password
+            if (email.includes('admin')) {
+                passwordInput.value = 'admin123';
+            } else {
+                passwordInput.value = 'demo123';
+            }
+            
+            // Add visual feedback
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+        });
+    });
+
+    // Form validation
+    const emailInput = document.getElementById('email');
+    const passwordInp = document.getElementById('password');
+
+    function validateForm() {
+        const email = emailInput.value.trim();
+        const password = passwordInp.value.trim();
+        
+        const isValid = email && password && email.includes('@');
+        loginBtn.disabled = !isValid;
+        
+        return isValid;
+    }
+
+    emailInput.addEventListener('input', validateForm);
+    passwordInp.addEventListener('input', validateForm);
+
+    // Initial validation
+    validateForm();
+
+    // Auto-focus email field
+    emailInput.focus();
+});
+</script>
+
+<%- include('partials/footer') %>
+

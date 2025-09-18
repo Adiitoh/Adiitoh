@@ -1,0 +1,616 @@
+<%- include('partials/header') %>
+
+<div class="auth-container min-vh-100 d-flex align-items-center py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="auth-card card shadow-lg border-0">
+                    <div class="card-body p-5">
+                        <!-- Header -->
+                        <div class="text-center mb-4">
+                            <div class="auth-logo mb-3">
+                                <i class="bi bi-mortarboard-fill text-primary" style="font-size: 3rem;"></i>
+                            </div>
+                            <h2 class="fw-bold text-dark mb-2">Create Your Account</h2>
+                            <p class="text-muted">Join our educational platform today</p>
+                        </div>
+
+                        <!-- Registration Form -->
+                        <form action="/auth/register" method="POST" id="registerForm">
+                            <div class="row g-3">
+                                <!-- Personal Information -->
+                                <div class="col-12">
+                                    <h5 class="fw-semibold text-dark mb-3">
+                                        <i class="bi bi-person me-2"></i>
+                                        Personal Information
+                                    </h5>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="firstName" class="form-label fw-semibold">First Name *</label>
+                                    <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        id="firstName" 
+                                        name="firstName" 
+                                        placeholder="Enter your first name"
+                                        required
+                                        autocomplete="given-name"
+                                        value="<%= typeof firstName !== 'undefined' ? firstName : '' %>"
+                                    >
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="lastName" class="form-label fw-semibold">Last Name *</label>
+                                    <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        id="lastName" 
+                                        name="lastName" 
+                                        placeholder="Enter your last name"
+                                        required
+                                        autocomplete="family-name"
+                                        value="<%= typeof lastName !== 'undefined' ? lastName : '' %>"
+                                    >
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label fw-semibold">Email Address *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">
+                                            <i class="bi bi-envelope text-muted"></i>
+                                        </span>
+                                        <input 
+                                            type="email" 
+                                            class="form-control" 
+                                            id="email" 
+                                            name="email" 
+                                            placeholder="Enter your email"
+                                            required
+                                            autocomplete="email"
+                                            value="<%= typeof email !== 'undefined' ? email : '' %>"
+                                        >
+                                    </div>
+                                    <div class="form-text text-muted">
+                                        <i class="bi bi-info-circle me-1"></i>
+                                        Use your institutional email if available
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="phone" class="form-label fw-semibold">Phone Number</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">
+                                            <i class="bi bi-telephone text-muted"></i>
+                                        </span>
+                                        <input 
+                                            type="tel" 
+                                            class="form-control" 
+                                            id="phone" 
+                                            name="phone" 
+                                            placeholder="Enter your phone number"
+                                            autocomplete="tel"
+                                            value="<%= typeof phone !== 'undefined' ? phone : '' %>"
+                                        >
+                                    </div>
+                                </div>
+
+                                <!-- Account Information -->
+                                <div class="col-12 mt-4">
+                                    <h5 class="fw-semibold text-dark mb-3">
+                                        <i class="bi bi-shield-lock me-2"></i>
+                                        Account Information
+                                    </h5>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="role" class="form-label fw-semibold">Role *</label>
+                                    <select class="form-select" id="role" name="role" required>
+                                        <option value="">Select your role</option>
+                                        <option value="student" <%= typeof role !== 'undefined' && role === 'student' ? 'selected' : '' %>>Student</option>
+                                        <option value="lecturer" <%= typeof role !== 'undefined' && role === 'lecturer' ? 'selected' : '' %>>Lecturer</option>
+                                    </select>
+                                    <div class="form-text text-muted">
+                                        <i class="bi bi-info-circle me-1"></i>
+                                        Admin accounts can only be created by existing administrators
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="gender" class="form-label fw-semibold">Gender</label>
+                                    <select class="form-select" id="gender" name="gender">
+                                        <option value="">Select gender</option>
+                                        <option value="male" <%= typeof gender !== 'undefined' && gender === 'male' ? 'selected' : '' %>>Male</option>
+                                        <option value="female" <%= typeof gender !== 'undefined' && gender === 'female' ? 'selected' : '' %>>Female</option>
+                                        <option value="other" <%= typeof gender !== 'undefined' && gender === 'other' ? 'selected' : '' %>>Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="dateOfBirth" class="form-label fw-semibold">Date of Birth</label>
+                                    <input 
+                                        type="date" 
+                                        class="form-control" 
+                                        id="dateOfBirth" 
+                                        name="dateOfBirth"
+                                        autocomplete="bday"
+                                        value="<%= typeof dateOfBirth !== 'undefined' ? dateOfBirth : '' %>"
+                                    >
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="address" class="form-label fw-semibold">Address</label>
+                                    <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        id="address" 
+                                        name="address" 
+                                        placeholder="Enter your address"
+                                        autocomplete="street-address"
+                                        value="<%= typeof address !== 'undefined' ? address : '' %>"
+                                    >
+                                </div>
+
+                                <!-- Password Section -->
+                                <div class="col-12 mt-4">
+                                    <h5 class="fw-semibold text-dark mb-3">
+                                        <i class="bi bi-key me-2"></i>
+                                        Security
+                                    </h5>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="password" class="form-label fw-semibold">Password *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">
+                                            <i class="bi bi-lock text-muted"></i>
+                                        </span>
+                                        <input 
+                                            type="password" 
+                                            class="form-control" 
+                                            id="password" 
+                                            name="password" 
+                                            placeholder="Create a strong password"
+                                            required
+                                            autocomplete="new-password"
+                                        >
+                                        <button 
+                                            class="btn btn-outline-secondary" 
+                                            type="button" 
+                                            id="togglePassword"
+                                            tabindex="-1"
+                                        >
+                                            <i class="bi bi-eye" id="togglePasswordIcon"></i>
+                                        </button>
+                                    </div>
+                                    <div class="password-strength mt-2">
+                                        <div class="progress" style="height: 4px;">
+                                            <div class="progress-bar" id="passwordStrengthBar" style="width: 0%"></div>
+                                        </div>
+                                        <small class="text-muted" id="passwordStrengthText">Password strength</small>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="confirmPassword" class="form-label fw-semibold">Confirm Password *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light">
+                                            <i class="bi bi-lock-fill text-muted"></i>
+                                        </span>
+                                        <input 
+                                            type="password" 
+                                            class="form-control" 
+                                            id="confirmPassword" 
+                                            name="confirmPassword" 
+                                            placeholder="Confirm your password"
+                                            required
+                                            autocomplete="new-password"
+                                        >
+                                    </div>
+                                    <div class="password-match mt-2">
+                                        <small class="text-muted" id="passwordMatchText">Passwords must match</small>
+                                    </div>
+                                </div>
+
+                                <!-- Password Requirements -->
+                                <div class="col-12">
+                                    <div class="password-requirements bg-light rounded p-3">
+                                        <h6 class="fw-semibold mb-2">Password Requirements:</h6>
+                                        <div class="row g-2">
+                                            <div class="col-md-6">
+                                                <small class="requirement" id="req-length">
+                                                    <i class="bi bi-circle text-muted me-1"></i>
+                                                    At least 8 characters
+                                                </small>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <small class="requirement" id="req-uppercase">
+                                                    <i class="bi bi-circle text-muted me-1"></i>
+                                                    One uppercase letter
+                                                </small>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <small class="requirement" id="req-lowercase">
+                                                    <i class="bi bi-circle text-muted me-1"></i>
+                                                    One lowercase letter
+                                                </small>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <small class="requirement" id="req-number">
+                                                    <i class="bi bi-circle text-muted me-1"></i>
+                                                    One number
+                                                </small>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <small class="requirement" id="req-special">
+                                                    <i class="bi bi-circle text-muted me-1"></i>
+                                                    One special character
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Terms and Conditions -->
+                                <div class="col-12 mt-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="agreeTerms" name="agreeTerms" required>
+                                        <label class="form-check-label" for="agreeTerms">
+                                            I agree to the 
+                                            <a href="#" class="text-decoration-none">Terms of Service</a> 
+                                            and 
+                                            <a href="#" class="text-decoration-none">Privacy Policy</a>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="col-12 mt-4">
+                                    <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold" id="registerBtn" disabled>
+                                        <span class="btn-text">
+                                            <i class="bi bi-person-plus me-2"></i>
+                                            Create Account
+                                        </span>
+                                        <span class="btn-loading d-none">
+                                            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                                            Creating account...
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- Divider -->
+                        <div class="divider my-4">
+                            <span class="divider-text text-muted bg-white px-3">or</span>
+                        </div>
+
+                        <!-- Login Link -->
+                        <div class="text-center">
+                            <p class="text-muted mb-0">
+                                Already have an account? 
+                                <a href="/auth/login" class="text-decoration-none fw-semibold">
+                                    Sign in here
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Important Notice -->
+                <div class="notice-card card mt-4 border-0 bg-warning bg-opacity-10 border-warning">
+                    <div class="card-body p-4">
+                        <h6 class="fw-bold text-warning mb-2">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            Important Notice
+                        </h6>
+                        <p class="text-dark mb-0">
+                            Your account will require approval from an administrator before you can access the system. 
+                            You will be notified via email once your account has been approved.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.auth-container {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+}
+
+.auth-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="1" fill="white" opacity="0.1"/><circle cx="10" cy="50" r="1" fill="white" opacity="0.1"/><circle cx="90" cy="30" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.auth-card {
+    border-radius: 1rem;
+    backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 1;
+}
+
+.auth-logo {
+    animation: fadeInDown 0.8s ease-out;
+}
+
+.card-body {
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.form-control, .form-select {
+    border-color: #e9ecef;
+    padding: 0.75rem 1rem;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.input-group-text {
+    border-color: #e9ecef;
+}
+
+.divider {
+    position: relative;
+    text-align: center;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #dee2e6;
+}
+
+.divider-text {
+    position: relative;
+    z-index: 1;
+}
+
+.password-requirements {
+    border: 1px solid #e9ecef;
+}
+
+.requirement {
+    display: block;
+    margin-bottom: 0.25rem;
+    transition: color 0.3s ease;
+}
+
+.requirement.met {
+    color: #198754 !important;
+}
+
+.requirement.met i {
+    color: #198754 !important;
+}
+
+.requirement.met i::before {
+    content: "\f26a"; /* bi-check-circle-fill */
+}
+
+.notice-card {
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+/* Password strength colors */
+.strength-weak { background-color: #dc3545; }
+.strength-fair { background-color: #fd7e14; }
+.strength-good { background-color: #ffc107; }
+.strength-strong { background-color: #198754; }
+
+/* Animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Loading state */
+.btn-loading .btn-text {
+    display: none;
+}
+
+.btn:not(.loading) .btn-loading {
+    display: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .auth-card {
+        margin: 1rem;
+    }
+    
+    .card-body {
+        padding: 2rem !important;
+    }
+    
+    .notice-card {
+        margin: 1rem;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const registerForm = document.getElementById('registerForm');
+    const registerBtn = document.getElementById('registerBtn');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const togglePassword = document.getElementById('togglePassword');
+    const togglePasswordIcon = document.getElementById('togglePasswordIcon');
+    const agreeTerms = document.getElementById('agreeTerms');
+
+    // Password toggle functionality
+    togglePassword.addEventListener('click', function() {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        confirmPasswordInput.setAttribute('type', type);
+        
+        if (type === 'text') {
+            togglePasswordIcon.className = 'bi bi-eye-slash';
+        } else {
+            togglePasswordIcon.className = 'bi bi-eye';
+        }
+    });
+
+    // Password strength checker
+    passwordInput.addEventListener('input', function() {
+        checkPasswordStrength(this.value);
+        checkPasswordMatch();
+        validateForm();
+    });
+
+    confirmPasswordInput.addEventListener('input', function() {
+        checkPasswordMatch();
+        validateForm();
+    });
+
+    function checkPasswordStrength(password) {
+        const requirements = {
+            length: password.length >= 8,
+            uppercase: /[A-Z]/.test(password),
+            lowercase: /[a-z]/.test(password),
+            number: /\d/.test(password),
+            special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+        };
+
+        // Update requirement indicators
+        Object.keys(requirements).forEach(req => {
+            const element = document.getElementById(`req-${req}`);
+            if (requirements[req]) {
+                element.classList.add('met');
+                element.style.color = '#198754';
+            } else {
+                element.classList.remove('met');
+                element.style.color = '#6c757d';
+            }
+        });
+
+        // Calculate strength
+        const metCount = Object.values(requirements).filter(Boolean).length;
+        const strengthBar = document.getElementById('passwordStrengthBar');
+        const strengthText = document.getElementById('passwordStrengthText');
+
+        let strength = '';
+        let width = 0;
+        let className = '';
+
+        if (metCount === 0) {
+            strength = 'Password strength';
+            width = 0;
+        } else if (metCount <= 2) {
+            strength = 'Weak';
+            width = 25;
+            className = 'strength-weak';
+        } else if (metCount <= 3) {
+            strength = 'Fair';
+            width = 50;
+            className = 'strength-fair';
+        } else if (metCount <= 4) {
+            strength = 'Good';
+            width = 75;
+            className = 'strength-good';
+        } else {
+            strength = 'Strong';
+            width = 100;
+            className = 'strength-strong';
+        }
+
+        strengthBar.style.width = width + '%';
+        strengthBar.className = `progress-bar ${className}`;
+        strengthText.textContent = strength;
+        strengthText.className = `text-${className.replace('strength-', '')}`;
+    }
+
+    function checkPasswordMatch() {
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+        const matchText = document.getElementById('passwordMatchText');
+
+        if (confirmPassword === '') {
+            matchText.textContent = 'Passwords must match';
+            matchText.className = 'text-muted';
+        } else if (password === confirmPassword) {
+            matchText.textContent = 'Passwords match';
+            matchText.className = 'text-success';
+        } else {
+            matchText.textContent = 'Passwords do not match';
+            matchText.className = 'text-danger';
+        }
+    }
+
+    function validateForm() {
+        const requiredFields = ['firstName', 'lastName', 'email', 'role', 'password', 'confirmPassword'];
+        const allFilled = requiredFields.every(field => {
+            const element = document.getElementById(field);
+            return element && element.value.trim() !== '';
+        });
+
+        const passwordsMatch = passwordInput.value === confirmPasswordInput.value;
+        const termsAgreed = agreeTerms.checked;
+        const passwordStrong = passwordInput.value.length >= 8;
+
+        const isValid = allFilled && passwordsMatch && termsAgreed && passwordStrong;
+        registerBtn.disabled = !isValid;
+    }
+
+    // Add event listeners to all form fields
+    const formFields = registerForm.querySelectorAll('input, select');
+    formFields.forEach(field => {
+        field.addEventListener('input', validateForm);
+        field.addEventListener('change', validateForm);
+    });
+
+    agreeTerms.addEventListener('change', validateForm);
+
+    // Form submission with loading state
+    registerForm.addEventListener('submit', function(e) {
+        registerBtn.classList.add('loading');
+        registerBtn.disabled = true;
+        
+        // Show loading state
+        registerBtn.querySelector('.btn-text').classList.add('d-none');
+        registerBtn.querySelector('.btn-loading').classList.remove('d-none');
+    });
+
+    // Initial validation
+    validateForm();
+
+    // Auto-focus first field
+    document.getElementById('firstName').focus();
+});
+</script>
+
+<%- include('partials/footer') %>
+

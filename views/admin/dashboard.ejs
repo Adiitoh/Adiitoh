@@ -1,0 +1,816 @@
+<%- include('../partials/header') %>
+<body class="dashboard-page">
+    <div class="dashboard-layout">
+        <%- include("../partials/admin-sidebar") %>
+        <div class="dashboard-content">
+            <div class="main-content">
+                <div class="container-fluid p-4">
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h3 fw-bold text-dark mb-1">Admin Dashboard</h1>
+                <p class="text-muted mb-0">Welcome back, <%= user.first_name %>! Here's what's happening in your system.</p>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary" onclick="refreshDashboard()">
+                    <i class="bi bi-arrow-clockwise me-1"></i>
+                    Refresh
+                </button>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-plus me-1"></i>
+                        Quick Actions
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/admin/add-admin">
+                            <i class="bi bi-person-plus me-2"></i>Add Administrator
+                        </a></li>
+                        <li><a class="dropdown-item" href="/admin/courses/create">
+                            <i class="bi bi-book me-2"></i>Create Course
+                        </a></li>
+                        <li><a class="dropdown-item" href="/admin/export">
+                            <i class="bi bi-download me-2"></i>Export Data
+                        </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/admin/settings">
+                            <i class="bi bi-gear me-2"></i>System Settings
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row g-4 mb-4">
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-primary bg-gradient rounded-3 p-3 me-3">
+                                <i class="bi bi-people text-white fs-4"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="text-muted mb-1">Total Users</h6>
+                                <h3 class="fw-bold mb-0" id="totalUsers">0</h3>
+                                <small class="text-success">
+                                    <i class="bi bi-arrow-up me-1"></i>
+                                    <span id="userGrowth">0%</span> this month
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-warning bg-gradient rounded-3 p-3 me-3">
+                                <i class="bi bi-clock-history text-white fs-4"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="text-muted mb-1">Pending Approvals</h6>
+                                <h3 class="fw-bold mb-0" id="pendingApprovals">0</h3>
+                                <small class="text-warning">
+                                    <i class="bi bi-exclamation-triangle me-1"></i>
+                                    Requires attention
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-info bg-gradient rounded-3 p-3 me-3">
+                                <i class="bi bi-book text-white fs-4"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="text-muted mb-1">Active Courses</h6>
+                                <h3 class="fw-bold mb-0" id="activeCourses">0</h3>
+                                <small class="text-info">
+                                    <i class="bi bi-graph-up me-1"></i>
+                                    <span id="courseGrowth">0</span> new this week
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-success bg-gradient rounded-3 p-3 me-3">
+                                <i class="bi bi-clipboard-check text-white fs-4"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="text-muted mb-1">Total Assessments</h6>
+                                <h3 class="fw-bold mb-0" id="totalAssessments">0</h3>
+                                <small class="text-success">
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    <span id="completedAssessments">0</span> completed
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Row -->
+        <div class="row g-4">
+            <!-- Pending Approvals -->
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-transparent border-0 pb-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="fw-bold mb-0">
+                                <i class="bi bi-clock-history text-warning me-2"></i>
+                                Pending User Approvals
+                            </h5>
+                            <a href="/admin/pending-approvals" class="btn btn-sm btn-outline-primary">
+                                View All
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="pendingApprovalsTable">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Role</th>
+                                        <th>Registered</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="loading-row">
+                                        <td colspan="4" class="text-center py-4">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                            <p class="text-muted mt-2 mb-0">Loading pending approvals...</p>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Status -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-header bg-transparent border-0 pb-0">
+                        <h5 class="fw-bold mb-0">
+                            <i class="bi bi-activity text-success me-2"></i>
+                            System Status
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="status-items">
+                            <div class="status-item d-flex justify-content-between align-items-center mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="status-indicator bg-success rounded-circle me-2"></div>
+                                    <span class="fw-semibold text-on-dark">Database</span>
+                                </div>
+                                <span class="badge bg-success">Online</span>
+                            </div>
+                            
+                            <div class="status-item d-flex justify-content-between align-items-center mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="status-indicator bg-success rounded-circle me-2"></div>
+                                    <span class="fw-semibold text-on-dark">API Server</span>
+                                </div>
+                                <span class="badge bg-success">Running</span>
+                            </div>
+                            
+                            <div class="status-item d-flex justify-content-between align-items-center mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="status-indicator bg-warning rounded-circle me-2"></div>
+                                    <span class="fw-semibold text-on-dark">Email Service</span>
+                                </div>
+                                <span class="badge bg-warning">Limited</span>
+                            </div>
+                            
+                            <div class="status-item d-flex justify-content-between align-items-center mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="status-indicator bg-success rounded-circle me-2"></div>
+                                    <span class="fw-semibold text-on-dark">File Storage</span>
+                                </div>
+                                <span class="badge bg-success">Available</span>
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="system-info">
+                            <h6 class="fw-semibold mb-3">System Information</h6>
+                            <div class="info-item d-flex justify-content-between mb-2">
+                                <span class="text-muted">Server Uptime:</span>
+                                <span class="fw-semibold" id="serverUptime">Loading...</span>
+                            </div>
+                            <div class="info-item d-flex justify-content-between mb-2">
+                                <span class="text-muted">Last Backup:</span>
+                                <span class="fw-semibold text-success">2 hours ago</span>
+                            </div>
+                            <div class="info-item d-flex justify-content-between mb-2">
+                                <span class="text-muted">Version:</span>
+                                <span class="fw-semibold">v1.0.0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row g-4 mt-2">
+            <!-- User Registration Chart -->
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-transparent border-0 pb-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="fw-bold mb-0">
+                                <i class="bi bi-graph-up text-primary me-2"></i>
+                                User Registration Trends
+                            </h5>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <input type="radio" class="btn-check" name="chartPeriod" id="week" checked>
+                                <label class="btn btn-outline-primary" for="week">Week</label>
+                                
+                                <input type="radio" class="btn-check" name="chartPeriod" id="month">
+                                <label class="btn btn-outline-primary" for="month">Month</label>
+                                
+                                <input type="radio" class="btn-check" name="chartPeriod" id="year">
+                                <label class="btn btn-outline-primary" for="year">Year</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="registrationChart" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Distribution -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-transparent border-0 pb-0">
+                        <h5 class="fw-bold mb-0">
+                            <i class="bi bi-pie-chart text-info me-2"></i>
+                            User Distribution
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="userDistributionChart" height="300"></canvas>
+                        <div class="chart-legend mt-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="legend-color bg-primary rounded me-2"></div>
+                                    <span class="small">Students</span>
+                                </div>
+                                <span class="fw-semibold" id="studentCount">0</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="legend-color bg-info rounded me-2"></div>
+                                    <span class="small">Lecturers</span>
+                                </div>
+                                <span class="fw-semibold" id="lecturerCount">0</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="legend-color bg-success rounded me-2"></div>
+                                    <span class="small">Admins</span>
+                                </div>
+                                <span class="fw-semibold" id="adminCount">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="row g-4 mt-2">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-transparent border-0 pb-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="fw-bold mb-0">
+                                <i class="bi bi-clock-history text-secondary me-2"></i>
+                                Recent System Activity
+                            </h5>
+                            <a href="/admin/logs" class="btn btn-sm btn-outline-secondary">
+                                View All Logs
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="activity-timeline" id="activityTimeline">
+                            <div class="text-center py-4">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p class="text-muted mt-2 mb-0">Loading recent activity...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.stat-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+}
+
+.activity-timeline .timeline-item {
+    position: relative;
+    padding-left: 2rem;
+    padding-bottom: 1rem;
+    border-left: 2px solid #e9ecef;
+}
+
+.activity-timeline .timeline-item:last-child {
+    border-left: none;
+    padding-bottom: 0;
+}
+
+.activity-timeline .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -6px;
+    top: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #0d6efd;
+}
+
+.activity-timeline .timeline-item.success::before {
+    background: #198754;
+}
+
+.activity-timeline .timeline-item.warning::before {
+    background: #ffc107;
+}
+
+.activity-timeline .timeline-item.danger::before {
+    background: #dc3545;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+        padding: 1rem;
+    }
+    
+    .stat-card .card-body {
+        padding: 1rem;
+    }
+    
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* Loading animations */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.loading-row {
+    animation: pulse 1.5s infinite;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize dashboard
+    loadDashboardData();
+    
+    // Set up auto-refresh
+    setInterval(loadDashboardData, 300000); // Refresh every 5 minutes
+    
+    // Chart period change handlers
+    document.querySelectorAll('input[name="chartPeriod"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.checked) {
+                updateRegistrationChart(this.id);
+            }
+        });
+    });
+});
+
+function loadDashboardData() {
+    // Load statistics
+    loadStatistics();
+    
+    // Load pending approvals
+    loadPendingApprovals();
+    
+    // Load charts
+    loadCharts();
+    
+    // Load recent activity
+    loadRecentActivity();
+    
+    // Update system status
+    updateSystemStatus();
+}
+
+function loadStatistics() {
+    fetch('/api/admin/dashboard/stats')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const stats = data.stats;
+                
+                // Update stat cards
+                document.getElementById('totalUsers').textContent = stats.totalUsers || 0;
+                document.getElementById('pendingApprovals').textContent = stats.pendingApprovals || 0;
+                document.getElementById('activeCourses').textContent = stats.activeCourses || 0;
+                document.getElementById('totalAssessments').textContent = stats.totalAssessments || 0;
+                
+                // Update growth indicators
+                document.getElementById('userGrowth').textContent = (stats.userGrowth || 0) + '%';
+                document.getElementById('courseGrowth').textContent = stats.courseGrowth || 0;
+                document.getElementById('completedAssessments').textContent = stats.completedAssessments || 0;
+                
+                // Update user distribution
+                document.getElementById('studentCount').textContent = stats.studentCount || 0;
+                document.getElementById('lecturerCount').textContent = stats.lecturerCount || 0;
+                document.getElementById('adminCount').textContent = stats.adminCount || 0;
+            }
+        })
+        .catch(error => {
+            console.error('Error loading statistics:', error);
+        });
+}
+
+function loadPendingApprovals() {
+    fetch('/api/admin/pending-approvals?limit=5')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const tbody = document.querySelector('#pendingApprovalsTable tbody');
+                               if (data.users.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-muted">
+                                <i class="bi bi-check-circle fs-1 text-success"></i>
+                                <p class="mt-2 mb-0">No pending approvals</p>
+                            </td>
+                        </tr>
+                    `;
+                } else {                   tbody.innerHTML = data.users.map(user => `
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="user-avatar me-2">
+                                        <div class="bg-secondary rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                            <i class="bi bi-person-fill text-white small"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="fw-semibold">${user.first_name} ${user.last_name}</div>
+                                        <small class="text-muted">${user.email}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-${getRoleBadgeColor(user.role)}">${user.role.charAt(0).toUpperCase() + user.role.slice(1)}</span>
+                            </td>
+                            <td>
+                                <small class="text-muted">${formatDate(user.created_at)}</small>
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-success btn-sm" onclick="approveUser('${user.id}')">
+                                        <i class="bi bi-check"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" onclick="rejectUser('${user.id}')">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error loading pending approvals:', error);
+            document.querySelector('#pendingApprovalsTable tbody').innerHTML = `
+                <tr>
+                    <td colspan="4" class="text-center py-4 text-danger">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <p class="mt-2 mb-0">Error loading data</p>
+                    </td>
+                </tr>
+            `;
+        });
+}
+
+function loadCharts() {
+    // Load registration chart
+    updateRegistrationChart('week');
+    
+    // Load user distribution chart
+    updateUserDistributionChart();
+}
+
+function updateRegistrationChart(period) {
+    fetch(`/api/admin/dashboard/registration-chart?period=${period}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const ctx = document.getElementById('registrationChart').getContext('2d');
+                
+                // Destroy existing chart if it exists
+                if (window.registrationChart) {
+                    window.registrationChart.destroy();
+                }
+                
+                window.registrationChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'New Registrations',
+                            data: data.data,
+                            borderColor: '#0d6efd',
+                            backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error loading registration chart:', error);
+        });
+}
+
+function updateUserDistributionChart() {
+    fetch('/api/admin/dashboard/user-distribution')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const ctx = document.getElementById('userDistributionChart').getContext('2d');
+                
+                // Destroy existing chart if it exists
+                if (window.userDistributionChart) {
+                    window.userDistributionChart.destroy();
+                }
+                
+                window.userDistributionChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Students', 'Lecturers', 'Admins'],
+                        datasets: [{
+                            data: [data.students, data.lecturers, data.admins],
+                            backgroundColor: ['#0d6efd', '#0dcaf0', '#198754'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error loading user distribution chart:', error);
+        });
+}
+
+function loadRecentActivity() {
+    fetch('/api/admin/dashboard/recent-activity')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const timeline = document.getElementById('activityTimeline');
+                
+                if (data.activities.length === 0) {
+                    timeline.innerHTML = `
+                        <div class="text-center py-4 text-muted">
+                            <i class="bi bi-clock fs-1"></i>
+                            <p class="mt-2 mb-0">No recent activity</p>
+                        </div>
+                    `;
+                } else {
+                    timeline.innerHTML = data.activities.map(activity => `
+                        <div class="timeline-item ${activity.type}">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6 class="fw-semibold mb-1">${activity.title}</h6>
+                                    <p class="text-muted mb-1">${activity.description}</p>
+                                    <small class="text-muted">${formatDate(activity.created_at)}</small>
+                                </div>
+                                <span class="badge bg-${getActivityBadgeColor(activity.type)}">${activity.type}</span>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error loading recent activity:', error);
+            document.getElementById('activityTimeline').innerHTML = `
+                <div class="text-center py-4 text-danger">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <p class="mt-2 mb-0">Error loading activity</p>
+                </div>
+            `;
+        });
+}
+
+function updateSystemStatus() {
+    // Update server uptime
+    fetch('/api/admin/system/uptime')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('serverUptime').textContent = data.uptime;
+            }
+        })
+        .catch(error => {
+            document.getElementById('serverUptime').textContent = 'Unknown';
+        });
+}
+
+// Helper functions
+function getRoleBadgeColor(role) {
+    switch(role) {
+        case 'admin': return 'success';
+        case 'lecturer': return 'info';
+        case 'student': return 'primary';
+        default: return 'secondary';
+    }
+}
+
+function getActivityBadgeColor(type) {
+    switch(type) {
+        case 'success': return 'success';
+        case 'warning': return 'warning';
+        case 'danger': return 'danger';
+        default: return 'secondary';
+    }
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+}
+
+function refreshDashboard() {
+    const btn = event.target;
+    const originalText = btn.innerHTML;
+    
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>Refreshing...';
+    btn.disabled = true;
+    
+    loadDashboardData();
+    
+    setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }, 2000);
+}
+
+// User approval functions
+function approveUser(userId) {
+    if (confirm('Are you sure you want to approve this user?')) {
+        fetch(`/api/admin/users/${userId}/approve`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                loadPendingApprovals();
+                loadStatistics();
+                showToast('User approved successfully', 'success');
+            } else {
+                showToast('Error approving user', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('Error approving user', 'error');
+        });
+    }
+}
+
+function rejectUser(userId) {
+    const reason = prompt('Please provide a reason for rejection:');
+    if (reason) {
+        fetch(`/api/admin/users/${userId}/reject`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ reason })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                loadPendingApprovals();
+                loadStatistics();
+                showToast('User rejected', 'warning');
+            } else {
+                showToast('Error rejecting user', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('Error rejecting user', 'error');
+        });
+    }
+}
+
+function showToast(message, type) {
+    // Simple toast implementation
+    const toast = document.createElement('div');
+    toast.className = `alert alert-${type === 'error' ? 'danger' : type} alert-dismissible fade show position-fixed`;
+    toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    toast.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.remove();
+    }, 5000);
+}
+</script>
+<%- include("../partials/footer") %>
+

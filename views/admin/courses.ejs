@@ -1,0 +1,211 @@
+<%- include("../partials/header") %>
+
+<div class="d-flex">
+    <%- include("../partials/admin-sidebar") %>    
+    <div class="main-content flex-grow-1">
+        <div class="container-fluid py-4">
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 mb-0">Course Management</h1>
+                    <p class="text-muted">Manage academic courses and assign lecturers</p>
+                </div>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCourseModal">
+                    <i class="bi bi-plus-circle me-1"></i>Add New Course
+                </button>
+            </div>
+
+            <!-- Filters and Search -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Search Courses</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-search"></i>
+                                </span>
+                                <input type="text" class="form-control" id="courseSearch" placeholder="Search by course name or code...">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Lecturer</label>
+                            <select class="form-select course-filter" name="lecturer">
+                                <option value="">All Lecturers</option>
+                                <% if (typeof lecturers !== 'undefined' && lecturers.length > 0) { %>
+                                    <% lecturers.forEach(lecturer => { %>
+                                        <option value="<%= lecturer.id %>"><%= lecturer.first_name %> <%= lecturer.last_name %></option>
+                                    <% }); %>
+                                <% } %>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">&nbsp;</label>
+                            <button class="btn btn-outline-secondary w-100" onclick="AdminModule.courses.clearFilters()">
+                                <i class="bi bi-x-circle me-1"></i>Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Courses Table -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-book me-2"></i>Available Courses
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="coursesTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Course Name</th>
+                                    <th>Course Code</th>
+                                    <th>Assigned Lecturer</th>
+                                    <th>Total Students</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (typeof courses !== 'undefined' && courses.length > 0) { %>
+                                    <% courses.forEach(course => { %>
+                                        <tr>
+                                            <td><%= course.name %></td>
+                                            <td><%= course.code %></td>
+                                            <td><%= course.lecturer_name || 'N/A' %></td>
+                                            <td><%= course.student_count %></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary me-1" title="Edit Course" data-bs-toggle="modal" data-bs-target="#editCourseModal" data-course-id="<%= course.id %>">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger" title="Delete Course" onclick="AdminModule.courses.deleteCourse('<%= course.id %>')">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="5" class="text-center py-4">
+                                            <i class="bi bi-exclamation-circle display-4 text-muted mb-3"></i>
+                                            <p class="text-muted">No courses available. Add a new course to get started.</p>
+                                        </td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <nav aria-label="Courses pagination" class="mt-3">
+                        <ul class="pagination justify-content-center" id="coursesPagination">
+                            <!-- Pagination will be generated here -->
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Course Modal -->
+<div class="modal fade" id="addCourseModal" tabindex="-1" aria-labelledby="addCourseModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCourseModalLabel">Add New Course</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addCourseForm">
+                    <div class="mb-3">
+                        <label for="newCourseName" class="form-label">Course Name *</label>
+                        <input type="text" class="form-control" id="newCourseName" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newCourseCode" class="form-label">Course Code *</label>
+                        <input type="text" class="form-control" id="newCourseCode" name="code" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newCourseDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="newCourseDescription" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newCourseLecturer" class="form-label">Assign Lecturer</label>
+                        <select class="form-select" id="newCourseLecturer" name="lecturer_id">
+                            <option value="">None</option>
+                            <% if (typeof lecturers !== 'undefined' && lecturers.length > 0) { %>
+                                <% lecturers.forEach(lecturer => { %>
+                                    <option value="<%= lecturer.id %>"><%= lecturer.first_name %> <%= lecturer.last_name %></option>
+                                <% }); %>
+                            <% } %>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" form="addCourseForm" class="btn btn-primary">Add Course</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Course Modal -->
+<div class="modal fade" id="editCourseModal" tabindex="-1" aria-labelledby="editCourseModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCourseModalLabel">Edit Course</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editCourseForm">
+                    <input type="hidden" id="editCourseId" name="id">
+                    <div class="mb-3">
+                        <label for="editCourseName" class="form-label">Course Name *</label>
+                        <input type="text" class="form-control" id="editCourseName" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editCourseCode" class="form-label">Course Code *</label>
+                        <input type="text" class="form-control" id="editCourseCode" name="code" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editCourseDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="editCourseDescription" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editCourseLecturer" class="form-label">Assign Lecturer</label>
+                        <select class="form-select" id="editCourseLecturer" name="lecturer_id">
+                            <option value="">None</option>
+                            <% if (typeof lecturers !== 'undefined' && lecturers.length > 0) { %>
+                                <% lecturers.forEach(lecturer => { %>
+                                    <option value="<%= lecturer.id %>"><%= lecturer.first_name %> <%= lecturer.last_name %></option>
+                                <% }); %>
+                            <% } %>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" form="editCourseForm" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Add any specific styles for this page here */
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        AdminModule.courses.initCoursesPage();
+    });
+</script>
+
+<%- include("../partials/footer") %>
+
